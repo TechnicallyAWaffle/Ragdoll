@@ -82,7 +82,7 @@ public class RagdollMain : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log(headPositionLastFrame);
+        // Debug.Log(headPositionLastFrame);
         if (headGrabbed == true)
         {
             headVelocity = (ragdollHead.transform.position - headPositionLastFrame) / Time.deltaTime;
