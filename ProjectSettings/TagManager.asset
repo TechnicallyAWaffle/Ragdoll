@@ -9,6 +9,7 @@ TagManager:
   - RagdollHead
   - Enemy
   - Scuttler
+  - Vice
   layers:
   - Default
   - TransparentFX

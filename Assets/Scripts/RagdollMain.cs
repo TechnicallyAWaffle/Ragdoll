@@ -12,8 +12,10 @@ public class RagdollMain : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public Vector3 headVelocity;
     private Vector3 headPositionLastFrame;
-    
-
+    private bool isDamaged = false;
+    public float flashDuration = 0.2f;
+    public float numFlashes = 3;
+    public float pushForce = 5f;
     [SerializeField]
     public float health;
     public float moveSpeed;
@@ -22,6 +24,8 @@ public class RagdollMain : MonoBehaviour
     public bool isGrounded = false;
     public bool isSeparated = false;
     public bool headGrabbed = false;
+    public bool headCapturedByVice = false;
+
     public Sprite ragDollBodySprite;
     public Sprite ragDollWholeSprite;
     public Vector2 movementInput = Vector2.zero;
@@ -102,7 +106,7 @@ public class RagdollMain : MonoBehaviour
 
     public void GrabHead(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && !headCapturedByVice)
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
@@ -131,7 +135,7 @@ public class RagdollMain : MonoBehaviour
 
     public void ReleaseHead(InputAction.CallbackContext context)
     {
-        if (context.canceled)
+        if (context.canceled && !headCapturedByVice)
         {
             headGrabbed = false;
             rbHead.gravityScale = 3;
@@ -155,4 +159,76 @@ public class RagdollMain : MonoBehaviour
         }
     }
 
+    public void TakeDamage (GameObject enemy)
+    {
+        // probably remove health, flash sprite, and then do anything specific to enemy. push back will likely be enemy specific
+        isDamaged = true;
+        if (spriteRenderer != null)
+        {
+            StartCoroutine(FlashSprite(spriteRenderer));
+        }
+
+        switch (enemy.tag) {
+            case "Scuttler":
+                HitByScuttler (enemy);
+            break;
+            case "Vice":
+                HitByVice (enemy);
+            break;
+            default:
+            break;
+        }
+    }
+
+    public void HitByScuttler (GameObject enemy)
+    {
+        Rigidbody2D rb = this.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            Debug.Log("Hit by a cute lil scuttler");
+            Bounds bounds = enemy.GetComponent<SpriteRenderer>().bounds; // Assuming the object has a SpriteRenderer
+
+            float middleX = (bounds.min.x + bounds.max.x) / 2f;
+            float middleY = (bounds.min.y + bounds.max.y) / 2f;
+            Vector2 startPosition = new Vector2(middleX, middleY);
+            Vector2 ragdollStartPosition = new Vector2(this.transform.position.x, this.transform.position.y);
+            Vector2 direction = (ragdollStartPosition - startPosition).normalized;
+            if (direction.x > 0.8) direction = new Vector2 (0.8f, 0.6f);
+            if (direction.x < -0.8) direction = new Vector2 (-0.8f, 0.6f);
+            rb.position = new Vector2(rb.position.x, rb.position.y + 0.1f);
+            isGrounded = false;
+            // direction = new Vector2(1, 1);
+            // rb.velocity = direction * pushForce;
+            // Debug.Log(ragdollStartPosition);
+            // Debug.Log(startPosition);
+            // Debug.Log(pushForce);
+            // Debug.Log(direction * pushForce);
+            rb.AddForce(direction * pushForce, ForceMode2D.Impulse);
+        }
+    }
+
+    public void HitByVice (GameObject enemy)
+    {
+        // take the head and release head and move to center
+        Debug.Log("Drop Head");
+        isSeparated = true;
+        headCapturedByVice = true;
+        headGrabbed = false;
+        rbHead.gravityScale = 0;
+        rbHead.velocity = Vector2.zero;
+        ragdollHead.SetActive(true);
+        spriteRenderer.sprite = ragDollBodySprite;
+        headPositionLastFrame = ragdollHead.transform.position;
+    }
+
+    IEnumerator FlashSprite(SpriteRenderer sprite)
+    {
+        for (int i = 0; i < numFlashes * 2; i++)
+        {
+            sprite.enabled = !sprite.enabled;
+            yield return new WaitForSeconds(flashDuration);
+        }
+        sprite.enabled = true; // Ensure sprite is visible after flashing
+        isDamaged = false;
+    }
 }

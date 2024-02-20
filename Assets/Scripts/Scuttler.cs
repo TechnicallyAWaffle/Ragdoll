@@ -10,14 +10,6 @@ public class Scuttler : MonoBehaviour
     private bool movingLeft = false;
     private Rigidbody2D rb;
 
-    public float pushForce = 5f;
-    public float flashDuration = 0.2f;
-    public float numFlashes = 3;
-
-    // Add references to your sprites here
-    public Sprite leftSprite; // scuttler_3
-    public Sprite rightSprite; // scuttler_1
-    public Sprite turnSprite; // scuttler_2
 
     private SpriteRenderer spriteRenderer;
 
@@ -30,9 +22,6 @@ public class Scuttler : MonoBehaviour
     void Update()
     {
         rb.velocity = new Vector2(movingLeft ? -moveSpeed : moveSpeed, rb.velocity.y);
-
-        // Set the sprite based on the direction of movement
-        spriteRenderer.sprite = movingLeft ? leftSprite : rightSprite;
 
         // Determine the direction of the raycast based on the movement direction
         Vector2 rayDirection = movingLeft ? new Vector2(-1, -5) : new Vector2(1, -5);
@@ -73,7 +62,6 @@ public class Scuttler : MonoBehaviour
         movingLeft = !movingLeft;
 
         // Change to the turning sprite before flipping direction
-        spriteRenderer.sprite = turnSprite;
 
         // Use a coroutine to wait for 2 seconds before flipping the sprite back
         StartCoroutine(ChangeDirectionAfterDelay(2f));
@@ -84,7 +72,6 @@ public class Scuttler : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         // After waiting, set the sprite based on the new direction
-        spriteRenderer.sprite = movingLeft ? leftSprite : rightSprite;
 
         // This also handles the rotation if you're using sprites to indicate direction instead of rotating the GameObject
         transform.eulerAngles = new Vector3(0, movingLeft ? 180 : 0, 0);
@@ -95,46 +82,11 @@ public class Scuttler : MonoBehaviour
         // Check if the collider is your ragdoll head or the Rigidbody
         if (collision.gameObject.CompareTag("RagdollHead") || collision.gameObject.CompareTag("Ragdoll"))
         {
+            // get ragdoll game object
             Debug.Log("Collision");
-            // Apply force
-            Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                Bounds bounds = spriteRenderer.bounds; // Assuming the object has a SpriteRenderer
-
-                float middleX = (bounds.min.x + bounds.max.x) / 2f;
-                float middleY = (bounds.min.y + bounds.max.y) / 2f;
-                Vector2 startPosition = new Vector2(middleX, middleY);
-                Vector2 ragdollStartPosition = new Vector2(collision.transform.position.x, collision.transform.position.y);
-                Vector2 direction = (ragdollStartPosition - startPosition).normalized;
-                if (direction.x > 0.8) direction = new Vector2 (0.8f, 0.6f);
-                if (direction.x < -0.8) direction = new Vector2 (-0.8f, 0.6f);
-                rb.position = new Vector2(rb.position.x, rb.position.y + 0.1f);
-                // direction = new Vector2(1, 1);
-                // rb.velocity = direction * pushForce;
-                Debug.Log(ragdollStartPosition);
-                Debug.Log(startPosition);
-                Debug.Log(pushForce);
-                Debug.Log(direction * pushForce);
-                rb.AddForce(direction * pushForce, ForceMode2D.Impulse);
-            }
-
-            // Start flashing
-            SpriteRenderer ragdollSpriteRenderer = collision.gameObject.GetComponent<SpriteRenderer>();
-            if (ragdollSpriteRenderer != null)
-            {
-                StartCoroutine(FlashSprite(ragdollSpriteRenderer));
-            }
+            GameObject ragdollObject = GameObject.FindGameObjectWithTag("Ragdoll");
+            RagdollMain ragdollMain = ragdollObject.GetComponent<RagdollMain>();
+            ragdollMain.TakeDamage(this.gameObject);
         }
-    }
-
-    IEnumerator FlashSprite(SpriteRenderer sprite)
-    {
-        for (int i = 0; i < numFlashes * 2; i++)
-        {
-            sprite.enabled = !sprite.enabled;
-            yield return new WaitForSeconds(flashDuration);
-        }
-        sprite.enabled = true; // Ensure sprite is visible after flashing
     }
 }

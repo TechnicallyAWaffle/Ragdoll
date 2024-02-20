@@ -10,7 +10,7 @@ public abstract class BaseInteractive : MonoBehaviour
     {
         if (!isActive)
         {
-            Debug.Log($"{this.gameObject.name} Activated!");
+            // Debug.Log($"{this.gameObject.name} Activated!");
             isActive = true;
             ToggleSubObjects(true);
         }
@@ -20,7 +20,7 @@ public abstract class BaseInteractive : MonoBehaviour
     {
         if (isActive)
         {
-            Debug.Log($"{this.gameObject.name} Deactivated!");
+            // Debug.Log($"{this.gameObject.name} Deactivated!");
             isActive = false;
             ToggleSubObjects(false);
         }
