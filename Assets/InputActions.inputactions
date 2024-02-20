@@ -159,7 +159,7 @@
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "GrabHead",
                     "isComposite": false,
                     "isPartOfComposite": false
