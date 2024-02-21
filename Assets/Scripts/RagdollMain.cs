@@ -17,13 +17,8 @@ public class RagdollMain : MonoBehaviour
     public float flashDuration = 0.2f;
     public float numFlashes = 3;
     public float pushForce = 5f;
-    [SerializeField]
-    public float moveSpeed;
-    public float jumpPower;
     public bool flipped = false;
-    public Sprite ragDollBodySprite;
     public Sprite ragDollWholeSprite;
-    public Vector2 movementInput = Vector2.zero;
     private Rigidbody2D rb;
     
 
@@ -237,6 +232,7 @@ public class RagdollMain : MonoBehaviour
         rbHead.gravityScale = 0;
         headMeter = maxHeadMeter;
         lineRenderer.enabled = false;
+        headCapturedByVice = false;
     }
 
     private void UpdateTether()
@@ -283,21 +279,25 @@ public class RagdollMain : MonoBehaviour
     public void TakeDamage (GameObject enemy)
     {
         // probably remove health, flash sprite, and then do anything specific to enemy. push back will likely be enemy specific
-        isDamaged = true;
-        if (spriteRenderer != null)
-        {
-            StartCoroutine(FlashSprite(spriteRenderer));
-        }
-
-        switch (enemy.tag) {
-            case "Scuttler":
-                HitByScuttler (enemy);
-            break;
-            case "Vice":
-                HitByVice (enemy);
-            break;
-            default:
-            break;
+        if (!isDamaged) {
+            isDamaged = true;
+            StartCoroutine(IFrames(1.0f));
+            GameObject ragdoll = GameObject.FindGameObjectWithTag("Ragdoll");
+            SpriteRenderer[] sprites = ragdoll.GetComponentsInChildren<SpriteRenderer>();
+            foreach (SpriteRenderer sprite in sprites)
+            {
+                StartCoroutine(FlashSprite(sprite));
+            }
+            switch (enemy.tag) {
+                case "Scuttler":
+                    HitByScuttler (enemy);
+                break;
+                case "Vice":
+                    HitByVice (enemy);
+                break;
+                default:
+                break;
+            }
         }
     }
 
@@ -331,15 +331,20 @@ public class RagdollMain : MonoBehaviour
     public void HitByVice (GameObject enemy)
     {
         // take the head and release head and move to center
-        Debug.Log("Drop Head");
+        Debug.Log("Hit by vice");
         isSeparated = true;
         headCapturedByVice = true;
+        // headGrabbed = false;
+        // rbHead.gravityScale = 0;
+        // rbHead.velocity = Vector2.zero;
+        // ragdollHead.SetActive(true);
+        // headPositionLastFrame = ragdollHead.transform.position;
+        ragdollHead.transform.parent = null;
+        isLaunching = false;
+        rbHead.constraints = RigidbodyConstraints2D.None;
         headGrabbed = false;
-        rbHead.gravityScale = 0;
-        rbHead.velocity = Vector2.zero;
-        ragdollHead.SetActive(true);
-        spriteRenderer.sprite = ragDollBodySprite;
-        headPositionLastFrame = ragdollHead.transform.position;
+        rbHead.gravityScale = headGravity;
+        rbHead.velocity = headVelocity;
     }
 
     IEnumerator FlashSprite(SpriteRenderer sprite)
@@ -350,8 +355,14 @@ public class RagdollMain : MonoBehaviour
             yield return new WaitForSeconds(flashDuration);
         }
         sprite.enabled = true; // Ensure sprite is visible after flashing
+    }
+
+    IEnumerator IFrames(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
         isDamaged = false;
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         switch (collision.gameObject.tag)
