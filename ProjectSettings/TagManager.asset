@@ -7,6 +7,9 @@ TagManager:
   - Terrain
   - Ragdoll
   - RagdollHead
+  - Enemy
+  - Scuttler
+  - Vice
   - LightPressurePlate
   - Door
   - HeavyPressurePlate
