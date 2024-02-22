@@ -20,6 +20,7 @@ public class RagdollMain : MonoBehaviour
     public bool flipped = false;
     public Sprite ragDollWholeSprite;
     private Rigidbody2D rb;
+    private GroundChecker groundChecker;
     
 
     //Runtime Variables
@@ -28,7 +29,6 @@ public class RagdollMain : MonoBehaviour
     private bool headGrabbed = false;
     public bool headCapturedByVice = false;
     //private bool flipped = false;
-    private bool isGrounded = false;
     private float health;
     private float currentHeadClamp;
     
@@ -91,6 +91,7 @@ public class RagdollMain : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = ragdollBody.GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        groundChecker = transform.Find("GroundChecker").GetComponent<GroundChecker>();
         PlayerInput playerInput = GetComponent<PlayerInput>();
 
         playerControls.inputActions = new InputActions();
@@ -110,7 +111,7 @@ public class RagdollMain : MonoBehaviour
         else
             animator.SetBool("isMoving", false);
 
-        if (isGrounded == true) rb.velocity = new Vector2(movementInput.x * moveSpeed, rb.velocity.y);
+        if (groundChecker.isGrounded == true) rb.velocity = new Vector2(movementInput.x * moveSpeed, rb.velocity.y);
         else rb.velocity = new Vector2(movementInput.x * (moveSpeed / 2), rb.velocity.y);
 
         if (movementInput.x > 0) transform.localScale = new Vector3(-1, 1, 1);
@@ -154,7 +155,7 @@ public class RagdollMain : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.performed && isGrounded == true)
+        if (context.performed && groundChecker.isGrounded == true)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
         }
@@ -260,22 +261,6 @@ public class RagdollMain : MonoBehaviour
             
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Terrain")
-        {
-            isGrounded = true;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Terrain")
-        {
-            isGrounded = false;
-        }
-    }
-
     public void TakeDamage (GameObject enemy)
     {
         // probably remove health, flash sprite, and then do anything specific to enemy. push back will likely be enemy specific
@@ -317,7 +302,7 @@ public class RagdollMain : MonoBehaviour
             if (direction.x > 0.8) direction = new Vector2 (0.8f, 0.6f);
             if (direction.x < -0.8) direction = new Vector2 (-0.8f, 0.6f);
             rb.position = new Vector2(rb.position.x, rb.position.y + 0.1f);
-            isGrounded = false;
+            groundChecker.isGrounded = false;
             // direction = new Vector2(1, 1);
             // rb.velocity = direction * pushForce;
             // Debug.Log(ragdollStartPosition);
