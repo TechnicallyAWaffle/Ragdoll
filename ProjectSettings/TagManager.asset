@@ -15,6 +15,7 @@ TagManager:
   - HeavyPressurePlate
   - Button
   - Recharger
+  - NPC
   layers:
   - Default
   - TransparentFX

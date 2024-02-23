@@ -21,6 +21,7 @@ public class RagdollMain : MonoBehaviour
     public Sprite ragDollWholeSprite;
     private Rigidbody2D rb;
     private GroundChecker groundChecker;
+    private InteractionManager interactionManager;
     
 
     //Runtime Variables
@@ -63,6 +64,7 @@ public class RagdollMain : MonoBehaviour
         public InputAction launchHead; 
         public InputAction grabHead; //Default: Left Mouse Button
         public InputAction jump; // Default: Space
+        public InputAction interact; //Default: E
     }
 
     public playerActions playerControls;
@@ -83,6 +85,10 @@ public class RagdollMain : MonoBehaviour
         playerControls.reattach = playerControls.inputActions.Player.Reattach;
         playerControls.reattach.Enable();
         playerControls.reattach.started += ReattachHead;
+
+        playerControls.interact = playerControls.inputActions.Player.Interact;
+        playerControls.interact.Enable();
+        playerControls.interact.performed += interactionManager.Interact;
     }
 
     // Start is called before the first frame update
@@ -93,6 +99,7 @@ public class RagdollMain : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         groundChecker = transform.Find("GroundChecker").GetComponent<GroundChecker>();
         PlayerInput playerInput = GetComponent<PlayerInput>();
+        interactionManager = transform.Find("InteractionManager").GetComponent<InteractionManager>();
 
         playerControls.inputActions = new InputActions();
         playerControls.inputActions.Enable();
@@ -127,9 +134,9 @@ public class RagdollMain : MonoBehaviour
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + new Vector3(0,0,15);
             Vector3 headAnchor = transform.position + new Vector3(0, headYOffset, 0);
             Vector3 mouseVector = (mousePosition - headAnchor);
-            Debug.Log("Mouse: " + mousePosition);
-            Debug.Log("Head: " + ragdollHead.transform.position);
-            Debug.DrawLine(headAnchor + new Vector3(0, headYOffset,0), mousePosition, Color.green);
+            //Debug.Log("Mouse: " + mousePosition);
+            //Debug.Log("Head: " + ragdollHead.transform.position);
+            //Debug.DrawLine(headAnchor + new Vector3(0, headYOffset,0), mousePosition, Color.green);
 
             RaycastHit2D hit = Physics2D.Raycast(headAnchor, mouseVector.normalized, currentHeadClamp, 64);
             if (mouseVector.magnitude <= currentHeadClamp)
@@ -350,26 +357,10 @@ public class RagdollMain : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        switch (collision.gameObject.tag)
-        {
-            case "LightPressurePlate":
-                collision.gameObject.GetComponent<ITriggerable>().ActivateLinked();
-                break;
-            case "Recharger":
-                headMeter = maxHeadMeter;
-                Destroy(collision.gameObject);
-                break;
-        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        switch (collision.gameObject.tag)
-        {
-            case "LightPressurePlate":
-                collision.gameObject.GetComponent<ITriggerable>().DeactivateLinked();
-                break;
-        }
     }
 
 }
