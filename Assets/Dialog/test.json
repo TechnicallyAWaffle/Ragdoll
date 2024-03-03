@@ -1,1 +1,1 @@
-﻿{"inkVersion":21,"root":[["^This is a test!","\n","^Here's another line!","\n","^How may I help you, my asphyxiated feline friend?","\n","ev","str","^Pearce","/str",{"x()":"SetSpeaker","exArgs":1},"pop","/ev","\n",["done",{"#f":5,"#n":"g-0"}],null],"done",{"#f":1}],"listDefs":{}}
+﻿{"inkVersion":21,"root":[["^This is a test!","\n","^Here's another line!","\n","^How may I help you, my asphyxiated feline friend?","\n","ev","str","^Pearce","/str",{"x()":"SetSpeaker","exArgs":1},"pop","/ev","\n","end",["done",{"#f":5,"#n":"g-0"}],null],"done",{"#f":1}],"listDefs":{}}

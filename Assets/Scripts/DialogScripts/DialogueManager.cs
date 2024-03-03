@@ -97,8 +97,3 @@ public class DialogueManager : MonoBehaviour
     }
 
 }
-
-
-/* bubble showing --> prefab
- * end convo fix (exitdialoguemode not being called?)
- */
