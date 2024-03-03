@@ -1,14 +1,16 @@
 //using Ink.Parsed;
+//DialogueManager --> Ink file(actual dialogue) mechanics
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using Ink.Runtime;
+using Ink.Runtime;   //allows for use of "Story" type in inkfiles
 using UnityEngine.InputSystem;
+using System.Data;
 
 public class DialogueManager : MonoBehaviour
 {
-    //Singleton Class
+    //Singleton Class - can only have 1 object at a time
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
@@ -19,7 +21,7 @@ public class DialogueManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (instance != null)
         {
             Debug.LogWarning("Found more than one Dialogue Manager in the scene");
         }
@@ -53,22 +55,31 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    //Grabs dialogue from inkJson file & displays it to screen
+    //Grabs dialogue from inkJson file & displays it to screen (used in DialogueTrigger.cs)
     public void EnterDialogueMode(TextAsset inkJSON)
     {
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
 
+        currentStory.BindExternalFunction("SetSpeaker", (string character) =>
+        {
+            Debug.Log(character);
+            //currentStory = new Story(inkJSON.text);  use character parameter here?
+        });
+
         ContinueStory();
     }
 
-    //Exits the dialogue 
+    //Exits the dialogue if we've gone through the whole InkJSON file
     private void ExitDialogueMode()
     {
+        Debug.Log("Exit Dialogue Function Called");
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
         dialogueText.text = "";
+        currentStory.UnbindExternalFunction("SetSpeaker");
+        currentStory = null;
     }
 
     //Checks if you can continue dialogue
@@ -76,6 +87,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (currentStory.canContinue)
         {
+            //Grab the next line of dialogue
             dialogueText.text = currentStory.Continue();
         }
         else
@@ -83,4 +95,10 @@ public class DialogueManager : MonoBehaviour
             ExitDialogueMode();
         }
     }
+
 }
+
+
+/* bubble showing --> prefab
+ * end convo fix (exitdialoguemode not being called?)
+ */
