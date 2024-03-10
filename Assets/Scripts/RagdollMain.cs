@@ -16,7 +16,7 @@ public class RagdollMain : MonoBehaviour
     private bool isDamaged = false;
     public float flashDuration = 0.2f;
     public float numFlashes = 3;
-    public float pushForce = 5f;
+    public float pushForce = 10f;
     public bool flipped = false;
     public Sprite ragDollWholeSprite;
     private Rigidbody2D rb;
@@ -118,7 +118,9 @@ public class RagdollMain : MonoBehaviour
         else
             animator.SetBool("isMoving", false);
 
-        if (groundChecker.isGrounded == true) rb.velocity = new Vector2(movementInput.x * moveSpeed, rb.velocity.y);
+        // if taking damage then should fly back
+        if (isDamaged && !isGrounded);
+        else if (isGrounded) rb.velocity = new Vector2(movementInput.x * moveSpeed, rb.velocity.y);
         else rb.velocity = new Vector2(movementInput.x * (moveSpeed / 2), rb.velocity.y);
 
         if (movementInput.x > 0) transform.localScale = new Vector3(-1, 1, 1);
@@ -268,7 +270,23 @@ public class RagdollMain : MonoBehaviour
             
     }
 
-    public void TakeDamage (GameObject enemy)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Terrain")
+        {
+            isGrounded = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Terrain")
+        {
+            isGrounded = false;
+        }
+    }
+
+    public void TakeDamage (GameObject enemy, Vector2 collisionPoint)
     {
         // probably remove health, flash sprite, and then do anything specific to enemy. push back will likely be enemy specific
         if (!isDamaged) {
@@ -282,42 +300,64 @@ public class RagdollMain : MonoBehaviour
             }
             switch (enemy.tag) {
                 case "Scuttler":
-                    HitByScuttler (enemy);
+                    HitByScuttler (enemy, collisionPoint);
                 break;
                 case "Vice":
                     HitByVice (enemy);
                 break;
+                case "SwingingMace":
+                    HitByMace (enemy, collisionPoint);
+                break;
                 default:
+                    fusRoDah (enemy, collisionPoint, pushForce);
                 break;
             }
         }
     }
 
-    public void HitByScuttler (GameObject enemy)
+    public void fusRoDah(GameObject enemy, Vector2 collisionPoint, float strength)
     {
+        float disableMovementDuration = 0.5f; 
         Rigidbody2D rb = this.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            Debug.Log("Hit by a cute lil scuttler");
-            Bounds bounds = enemy.GetComponent<SpriteRenderer>().bounds; // Assuming the object has a SpriteRenderer
-
-            float middleX = (bounds.min.x + bounds.max.x) / 2f;
-            float middleY = (bounds.min.y + bounds.max.y) / 2f;
-            Vector2 startPosition = new Vector2(middleX, middleY);
-            Vector2 ragdollStartPosition = new Vector2(this.transform.position.x, this.transform.position.y);
-            Vector2 direction = (ragdollStartPosition - startPosition).normalized;
-            if (direction.x > 0.8) direction = new Vector2 (0.8f, 0.6f);
-            if (direction.x < -0.8) direction = new Vector2 (-0.8f, 0.6f);
+            Vector2 direction = (new Vector2(this.transform.position.x, this.transform.position.y) - collisionPoint).normalized;
+            if (direction.x > 0.8) direction = new Vector2(0.8f, 0.6f);
+            if (direction.x < -0.8) direction = new Vector2(-0.8f, 0.6f);
             rb.position = new Vector2(rb.position.x, rb.position.y + 0.1f);
-            groundChecker.isGrounded = false;
-            // direction = new Vector2(1, 1);
-            // rb.velocity = direction * pushForce;
-            // Debug.Log(ragdollStartPosition);
-            // Debug.Log(startPosition);
-            // Debug.Log(pushForce);
-            // Debug.Log(direction * pushForce);
-            rb.AddForce(direction * pushForce, ForceMode2D.Impulse);
+
+            // regular push or whatever
+            if (Random.Range(0, 1000) != 0)
+            {
+                StartCoroutine(DisableMovementCoroutine(disableMovementDuration));
+                isGrounded = false;
+                rb.AddForce(direction * strength, ForceMode2D.Impulse);
+            } 
+            
+            // SUPER FUS RO DAH
+            else {
+                StartCoroutine(DisableMovementCoroutine(disableMovementDuration * 10));
+                isGrounded = false;
+                rb.AddForce(direction * strength * 10, ForceMode2D.Impulse);
+            }
         }
+    }
+
+    private IEnumerator DisableMovementCoroutine(float duration)
+    {
+        playerControls.movement.Disable(); // Assuming 'movement' is your InputAction for movement
+        yield return new WaitForSeconds(duration);
+        playerControls.movement.Enable();
+    }
+
+    public void HitByScuttler (GameObject enemy, Vector2 collisionPoint)
+    {
+        fusRoDah (enemy, collisionPoint, pushForce);
+    }
+
+    public void HitByMace (GameObject enemy, Vector2 collisionPoint)
+    {
+        fusRoDah (enemy, collisionPoint, pushForce * 2);
     }
 
     public void HitByVice (GameObject enemy)
