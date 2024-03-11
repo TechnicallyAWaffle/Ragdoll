@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FlameSpitter : MonoBehaviour
 {
+    public HealthSystem health;
 
     public SpriteRenderer flameSprite;
     public CapsuleCollider2D flameHitbox;
@@ -17,6 +18,7 @@ public class FlameSpitter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        health = GameObject.FindGameObjectWithTag("Ragdoll").GetComponent<HealthSystem>();
         flameSprite.enabled = false;
         flameHitbox.enabled = false;
     }
@@ -59,4 +61,13 @@ public class FlameSpitter : MonoBehaviour
             isPaused = false;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Ragdoll")
+        {
+            health.hurt(1);
+        }
+    }
 }
+
