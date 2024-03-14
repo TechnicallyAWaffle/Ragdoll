@@ -14,13 +14,13 @@ public class SceneLoader : MonoBehaviour
     void Awake()
     {
         //FOR TESTING PURPOSES ONLY
-        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        // audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 
-        DontDestroyOnLoad(this);
-        foreach(GameObject currentObject in dontDestroyOnLoad)
-            DontDestroyOnLoad(currentObject);
+        // DontDestroyOnLoad(this);
+        // foreach(GameObject currentObject in dontDestroyOnLoad)
+        //     DontDestroyOnLoad(currentObject);
 
-        audioManager.PlaySceneTrack();
+        // audioManager.PlaySceneTrack();
     }
 
     // Update is called once per frame

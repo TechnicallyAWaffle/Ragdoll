@@ -37,7 +37,7 @@ public class RagdollMain : MonoBehaviour
 
     //Serialize
     [SerializeField] private float maxHealth;
-    [SerializeField] private float moveSpeed;
+    [SerializeField] public float moveSpeed;
     [SerializeField] private float jumpPower;
     [SerializeField] private float headClamp;
     [SerializeField] private float headMeter;
@@ -119,8 +119,8 @@ public class RagdollMain : MonoBehaviour
             animator.SetBool("isMoving", false);
 
         // if taking damage then should fly back
-        if (isDamaged && !isGrounded);
-        else if (isGrounded) rb.velocity = new Vector2(movementInput.x * moveSpeed, rb.velocity.y);
+        if (isDamaged && !groundChecker.isGrounded);
+        else if (groundChecker.isGrounded) rb.velocity = new Vector2(movementInput.x * moveSpeed, rb.velocity.y);
         else rb.velocity = new Vector2(movementInput.x * (moveSpeed / 2), rb.velocity.y);
 
         if (movementInput.x > 0) transform.localScale = new Vector3(-1, 1, 1);
@@ -274,7 +274,7 @@ public class RagdollMain : MonoBehaviour
     {
         if (collision.gameObject.tag == "Terrain")
         {
-            isGrounded = true;
+            // isGrounded = true;
         }
     }
 
@@ -282,7 +282,7 @@ public class RagdollMain : MonoBehaviour
     {
         if (collision.gameObject.tag == "Terrain")
         {
-            isGrounded = false;
+            // isGrounded = false;
         }
     }
 
@@ -330,14 +330,14 @@ public class RagdollMain : MonoBehaviour
             if (Random.Range(0, 1000) != 0)
             {
                 StartCoroutine(DisableMovementCoroutine(disableMovementDuration));
-                isGrounded = false;
+                // isGrounded = false;
                 rb.AddForce(direction * strength, ForceMode2D.Impulse);
             } 
             
             // SUPER FUS RO DAH
             else {
                 StartCoroutine(DisableMovementCoroutine(disableMovementDuration * 10));
-                isGrounded = false;
+                // isGrounded = false;
                 rb.AddForce(direction * strength * 10, ForceMode2D.Impulse);
             }
         }

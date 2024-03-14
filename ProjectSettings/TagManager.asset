@@ -15,11 +15,8 @@ TagManager:
   - HeavyPressurePlate
   - Button
   - Recharger
-<<<<<<< Updated upstream
   - NPC
-=======
   - SwingingMace
->>>>>>> Stashed changes
   layers:
   - Default
   - TransparentFX

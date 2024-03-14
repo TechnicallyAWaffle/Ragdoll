@@ -12,7 +12,19 @@ public class SpeedPowerup : Item
     {
         ragdollMain.moveSpeed *= multiplier;
         StartCoroutine(ResetSpeed(ragdollMain));
+
+        // Disable the visual representation and collider
+        if (TryGetComponent<Renderer>(out var renderer))
+        {
+            renderer.enabled = false; // Make the object invisible.
+        }
+        if (TryGetComponent<PolygonCollider2D>(out var collider))
+        {
+            Debug.Log("PolygonCollider2D disabled");
+            collider.enabled = false; // Make the object non-interactable for 2D physics.
+        }
     }
+
 
     private IEnumerator ResetSpeed(RagdollMain ragdollMain)
     {
