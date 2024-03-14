@@ -5,12 +5,20 @@ using UnityEngine.InputSystem;
 
 public class InteractionManager : MonoBehaviour
 {
-    [SerializeField] private RagdollMain ragdollMain;
     [SerializeField] private GameObject EToInteract;
-    [SerializeField] private HealthSystem ragdollHealth;
-    [SerializeField] private AudioManager audioManager;
+    private GameObject thisEToInteract;
+
+    public RagdollMain ragdollMain;
+    
+    public AudioManager audioManager;
+    public HealthSystem ragdollHealth;
 
     private GameObject currentNPC;
+
+    private void Start()
+    {
+        thisEToInteract = Instantiate(EToInteract);
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -18,15 +26,15 @@ public class InteractionManager : MonoBehaviour
         {
             GameObject npc = collision.gameObject;
             currentNPC = npc;
-            EToInteract.SetActive(true);
-            EToInteract.transform.position = new Vector3(npc.transform.position.x, -1, -1);
+            thisEToInteract.SetActive(true);
+            thisEToInteract.transform.position = new Vector3(npc.transform.position.x, -1, -1);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(EToInteract)
-            EToInteract.SetActive(false);
+        if (thisEToInteract)
+            thisEToInteract.SetActive(false);
     }
 
     public void Interact(InputAction.CallbackContext context)
@@ -34,7 +42,7 @@ public class InteractionManager : MonoBehaviour
         if (context.performed)
         {
             Debug.Log("yorb");
-            EToInteract.SetActive(false);
+            thisEToInteract.SetActive(false);
             switch (currentNPC.name)
             {
                 case "Ms. Pretty":
@@ -54,8 +62,16 @@ public class InteractionManager : MonoBehaviour
                     //No inkwell theme yet
                     //Call GUI event
                     break;
+                case "Escort":
+                    StartCoroutine(ragdollMain.GoToCheckpoint(currentNPC.transform.position, currentNPC.GetComponent<Animator>()));
+                    break;
+                case "Rudy":
+                    //Start Tutorial
+                    break;
             }
         }
-       
+
     }
+
+    
 }
