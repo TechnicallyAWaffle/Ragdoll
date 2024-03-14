@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpeedPowerup : Item
 {
-    public SpeedPowerup() : base(10, "Watch as the cat uses a mere fraction of his potential, gaining speed that humans can hardly witness.", "Speed", 2f, 5f)
+    public SpeedPowerup() : base(10, "Watch as the cat uses a mere fraction of his potential, gaining speed that humans can hardly witness.", "Speed", 2f, 5f, 1)
     {
     }
 

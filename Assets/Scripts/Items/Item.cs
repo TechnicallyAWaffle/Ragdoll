@@ -6,19 +6,21 @@ public abstract class Item : MonoBehaviour
     // Member variables
     public Guid uniqueID = Guid.NewGuid();
     public int price;
+    public int grade;
     public string description;
     public string type;
     public float multiplier;
     public float duration;
 
     // Constructor to set basic item properties
-    protected Item(int price, string description, string type, float multiplier, float duration)
+    protected Item(int price, string description, string type, float multiplier, float duration, int grade)
     {
         this.price = price;
         this.description = description;
         this.type = type;
         this.multiplier = multiplier;
         this.duration = duration;
+        this.grade = grade;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
