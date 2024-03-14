@@ -16,6 +16,7 @@ TagManager:
   - Button
   - Recharger
   - NPC
+  - SceneConfig
   layers:
   - Default
   - TransparentFX
