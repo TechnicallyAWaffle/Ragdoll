@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5516110173398205346}
   - component: {fileID: 298295308471360644}
   - component: {fileID: 8680122950487795363}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Scuttler
   m_TagString: Scuttler
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 975214728, guid: eccbb17b4fd854649b54288adaa12fc9, type: 3}
-  m_Color: {r: 0.9811321, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
