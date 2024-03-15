@@ -47,11 +47,13 @@ public class ItemManager : MonoBehaviour
     {
         if (ragdollMain == null || index < 0 || index >= storedPowerups.Count || storedPowerups[index] == null || storedPowerups[index].Count == 0)
         {
+            Debug.Log ("Invalid index: " + index);
             return; // Invalid index or no powerups of this type
         }
 
         Item powerup = storedPowerups[index][0];
         Debug.Log("Activating powerup: " + powerup.type);
+
         storedPowerups[index].RemoveAt(0); // This will affect the index of remaining powerups
         activePowerups[index] = powerup; // Mark the powerup as active
 

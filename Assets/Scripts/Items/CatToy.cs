@@ -7,7 +7,7 @@ public class CatToy : Item
     private Dictionary<GameObject, float> originalSpeeds = new Dictionary<GameObject, float>();
     private Dictionary<GameObject, (float swingDuration, float swingTimer)> originalMaceStates = new Dictionary<GameObject, (float, float)>();
 
-    public CatToy() : base(20, "Freezes all enemies for 10 seconds.", "Freeze", 1f, 10f, 1)
+    public CatToy() : base(20, "Freezes all enemies for 10 seconds.", "CatToy", 1f, 10f, 1)
     {
     }
 

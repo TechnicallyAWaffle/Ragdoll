@@ -343,7 +343,7 @@ public class RagdollMain : MonoBehaviour, IManageable
 
     public void fusRoDah(GameObject enemy, Vector2 collisionPoint, float strength)
     {
-        float disableMovementDuration = 0.5f; 
+        float disableMovementDuration = 0.25f; 
         Rigidbody2D rb = this.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
