@@ -82,20 +82,11 @@ public class Scuttler : MonoBehaviour
         // Check if the collider is your ragdoll head or the Rigidbody
         if (collision.gameObject.CompareTag("RagdollHead") || collision.gameObject.CompareTag("Ragdoll"))
         {
-            Debug.Log("Collision with Scuttler");
+            // get ragdoll game object
+            Debug.Log("Collision");
             GameObject ragdollObject = GameObject.FindGameObjectWithTag("Ragdoll");
-            if (ragdollObject != null)
-            {
-                RagdollMain ragdollMain = ragdollObject.GetComponent<RagdollMain>();
-                if (ragdollMain != null)
-                {
-                    // Obtain the first contact point
-                    Vector2 collisionPoint = collision.GetContact(0).point;
-                    // Now, pass the collision point to the TakeDamage method
-                    ragdollMain.TakeDamage(this.gameObject, collisionPoint);
-                }
-            }
+            RagdollMain ragdollMain = ragdollObject.GetComponent<RagdollMain>();
+            ragdollMain.TakeDamage(this.gameObject);
         }
     }
-
 }

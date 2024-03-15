@@ -117,20 +117,15 @@ public class Vice : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-      if (collision.gameObject.CompareTag("Ragdoll") || collision.gameObject.CompareTag("RagdollHead"))
-      {
-          GameObject ragdollObject = GameObject.FindGameObjectWithTag("Ragdoll");
-          if (ragdollObject != null)
-          {
-              RagdollMain ragdollMain = ragdollObject.GetComponent<RagdollMain>();
-              if (ragdollMain != null)
-              {
-                  // Pass the collision point as well
-                  Vector2 collisionPoint = collision.GetContact(0).point;
-                  ragdollMain.TakeDamage(this.gameObject, collisionPoint);
-              }
-          }
-      }
+        // Check if the collider is your ragdoll head or the Rigidbody
+        if (collision.gameObject.CompareTag("RagdollHead") || collision.gameObject.CompareTag("Ragdoll"))
+        {
+            // get ragdoll head and start returning to center
+            Debug.Log("Collision");
+            GameObject ragdollObject = GameObject.FindGameObjectWithTag("Ragdoll");
+            RagdollMain ragdollMain = ragdollObject.GetComponent<RagdollMain>();
+            ragdollMain.TakeDamage(this.gameObject);
+        }
     }
 
     void OnDrawGizmos()

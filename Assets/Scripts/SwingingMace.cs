@@ -86,7 +86,7 @@ private void Swing()
               {
                   // Pass the collision point as well
                   Vector2 collisionPoint = collision.GetContact(0).point;
-                  ragdollMain.TakeDamage(this.gameObject, collisionPoint);
+                  ragdollMain.TakeDamage(this.gameObject);
               }
           }
       }
