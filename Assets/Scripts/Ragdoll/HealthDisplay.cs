@@ -27,7 +27,7 @@ public class HealthDisplay : MonoBehaviour
     {
         int maxHealth = health.getMaxHealth();
         int currentHealth = health.getCurrentHealth();
-        int spacing = 100; // Set the spacing between hearts
+        int spacing = 90; // Set the spacing between hearts
 
         // Check and instantiate heart UI elements if needed
         while (heartList.Count < maxHealth)
