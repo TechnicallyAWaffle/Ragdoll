@@ -13,8 +13,14 @@ public class DialogueManager : MonoBehaviour
     //Singleton Class - can only have 1 object at a time
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
+    private GameObject currentDialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
     private Story currentStory; //keep track of current Inkfile to display
+
+    [SerializeField] private TextAsset pearceDialogue;
+    [SerializeField] private TextAsset embrodyleDialogue;
+    [SerializeField] private TextAsset msPrettyDialogue;
+    //[SerializeField] private TextAsset janusDialogue;
 
     private static DialogueManager instance;
     public bool dialogueIsPlaying { get; private set; } //sets outside scripts to read only
@@ -36,7 +42,6 @@ public class DialogueManager : MonoBehaviour
     private void Start()
     {
         dialogueIsPlaying = false;
-        dialoguePanel.SetActive(false);
     }
 
     private void Update()
@@ -46,19 +51,36 @@ public class DialogueManager : MonoBehaviour
         {
             return;
         }
-        
-        //continue to next line of dialogue everytime [E] is pressed
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            ContinueStory();
-        }
     }
 
 
     //Grabs dialogue from inkJson file & displays it to screen (used in DialogueTrigger.cs)
-    public void EnterDialogueMode(TextAsset inkJSON)
+    public void EnterDialogueMode(string characterName, string secondaryCharacterName, GameObject dialogueTemplate)
     {
-        currentStory = new Story(inkJSON.text);
+        dialoguePanel = dialogueTemplate;
+        dialogueText = dialogueTemplate.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+        string speakers = characterName;
+        if (secondaryCharacterName != null)
+            speakers = characterName + secondaryCharacterName;
+        switch (characterName)
+        {
+            case "Pearce":
+                currentStory = new Story(pearceDialogue.text);
+                currentStory.variablesState["speakers"] = "SOLO";
+                break;
+            case "Embrodyle":
+                currentStory = new Story(embrodyleDialogue.text);
+                currentStory.variablesState["speakers"] = "SOLO";
+                break;
+            case "Ms. Pretty":
+                currentStory = new Story(msPrettyDialogue.text);
+                currentStory.variablesState["speakers"] = "SOLO";
+                break;
+            case "Janus":
+                //currentStory = new Story(janusDialogue.text);
+                //currentStory.variablesState["speakers"] = speakers;
+                break;
+        }
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
 
@@ -69,6 +91,11 @@ public class DialogueManager : MonoBehaviour
         });
 
         ContinueStory();
+    }
+
+    public void SetSpeaker(string speakerName)
+    { 
+        
     }
 
     //Exits the dialogue if we've gone through the whole InkJSON file
@@ -83,7 +110,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     //Checks if you can continue dialogue
-    private void ContinueStory()
+    public void ContinueStory()
     {
         if (currentStory.canContinue)
         {

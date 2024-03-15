@@ -8,9 +8,6 @@ public class Dialog : MonoBehaviour
     [Header("Visual Cue")]
     [SerializeField] private GameObject visualCue;
 
-    [Header("Ink JSON")]
-    [SerializeField] private TextAsset inkJSON;
-
     private bool playerInRange;
 
     //Init variables & states
@@ -30,7 +27,7 @@ public class Dialog : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 //Grab ink dialogue once 'E' is pressed
-                DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
+                
             }
         }
         else

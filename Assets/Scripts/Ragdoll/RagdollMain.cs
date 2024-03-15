@@ -40,7 +40,6 @@ public class RagdollMain : MonoBehaviour, IManageable
     //private bool flipped = false;
     private float health;
     private float currentHeadClamp;
-    private bool inCutscene = false;
     private GameManager gameManager;
 
     //Public Runtime Variables 
@@ -405,5 +404,4 @@ public class RagdollMain : MonoBehaviour, IManageable
         yield return new WaitForSeconds(seconds);
         isDamaged = false;
     }
-
 }

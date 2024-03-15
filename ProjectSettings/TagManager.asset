@@ -17,6 +17,7 @@ TagManager:
   - Recharger
   - NPC
   - SceneConfig
+  - DialogueBox
   layers:
   - Default
   - TransparentFX
