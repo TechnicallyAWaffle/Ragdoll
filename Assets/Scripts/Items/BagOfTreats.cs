@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class FishTreat : Item
+public class BagOfTreats : Item
 {
-    public FishTreat() : base(10, "Restores a moderate amount of health to RagdollMain.", "FishTreat", 2f, 0f, 1)
+    public BagOfTreats() : base(15, "Restores a large amount of health to RagdollMain.", "BagOfTreats", 3f, 0f, 1)
     {
     }
 

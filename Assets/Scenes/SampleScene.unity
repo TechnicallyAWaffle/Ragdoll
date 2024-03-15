@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 906643027}
   - component: {fileID: 906643026}
   m_Layer: 0
-  m_Name: Speedy
+  m_Name: Speed Powerup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -183,6 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   price: 10
+  grade: 1
   description: Watch as the cat uses a mere fraction of his potential, gaining speed
     that humans can hardly witness.
   type: Speed
@@ -349,8 +350,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d23ee2544748aa94bb02c9b8baa39b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroyOnLoad: []
+  fadeToBlack: {fileID: 0}
+  ragdollMain: {fileID: 0}
   audioManager: {fileID: 0}
+  currentLevel: 0
+  currentRegion: 1
+  nextLevel: 
+  ragdollHealth: 0
 --- !u!4 &929107842
 Transform:
   m_ObjectHideFlags: 0
@@ -1049,11 +1055,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 656810906873400908, guid: ad2ec76c38e7fb646a6f3162b740b157, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.017603565
+      value: -0.01821508
       objectReference: {fileID: 0}
     - target: {fileID: 656810906873400908, guid: ad2ec76c38e7fb646a6f3162b740b157, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.19747695
+      value: 0.19734043
       objectReference: {fileID: 0}
     - target: {fileID: 1706431229802911642, guid: ad2ec76c38e7fb646a6f3162b740b157, type: 3}
       propertyPath: m_Name

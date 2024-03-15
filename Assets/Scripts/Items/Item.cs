@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public abstract class Item : MonoBehaviour
@@ -23,9 +24,9 @@ public abstract class Item : MonoBehaviour
         this.grade = grade;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.gameObject.CompareTag("Ragdoll") || collision.gameObject.CompareTag("RagdollHead"))
+        if (collider.gameObject.CompareTag("Ragdoll") || collider.gameObject.CompareTag("RagdollHead"))
         {
             GameObject ragdollObject = GameObject.FindGameObjectWithTag("Ragdoll");
             if (ragdollObject != null)
@@ -33,20 +34,23 @@ public abstract class Item : MonoBehaviour
                 RagdollMain ragdollMain = ragdollObject.GetComponent<RagdollMain>();
                 if (ragdollMain != null)
                 {
-                    this.Use(ragdollMain);
+                    ragdollMain.AddPowerup(this);
                 }
             }
         }
     }
 
+
     // Abstract function to be implemented by subclasses
     public abstract void Use(RagdollMain ragdollMain);
+
+    public abstract IEnumerator Reset(RagdollMain ragdollMain);
 
     // Getter functions
     public Guid GetId() => uniqueID;
     public int GetPrice() => price;
     public string GetDescription() => description;
-    public string GetType() => type;
+    new public string GetType() => type;
     public float GetMultiplier() => multiplier;
     public float GetDuration() => duration;
 }

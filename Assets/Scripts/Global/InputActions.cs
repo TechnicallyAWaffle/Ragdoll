@@ -71,6 +71,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ActivatePowerup"",
+                    ""type"": ""Button"",
+                    ""id"": ""ae402990-05d9-4f46-9601-f6f1b3936554"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -216,6 +225,105 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e796a46c-0e82-4025-84b5-a49ede981815"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivatePowerup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cfa8a372-b95b-4a59-a314-4342ef9efa20"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivatePowerup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d718ad30-f0c4-413a-8631-928a80d09e82"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivatePowerup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""482ab1ab-c696-4c55-9b9c-4be1ea8fb9ca"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivatePowerup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c24cacc-1f5d-4f4b-af49-73cc68431709"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivatePowerup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8520e7c5-136f-47a4-b240-4c515e821c1d"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivatePowerup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93f6e0b3-7d83-4a36-b6a6-017ea59423f1"",
+                    ""path"": ""<Keyboard>/7"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivatePowerup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f722f3a7-0530-40b7-a118-e6140065c47e"",
+                    ""path"": ""<Keyboard>/8"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivatePowerup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d9f58906-2862-4ff0-9ac7-d949c00355bb"",
+                    ""path"": ""<Keyboard>/9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivatePowerup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -290,6 +398,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Player_GrabHead = m_Player.FindAction("GrabHead", throwIfNotFound: true);
         m_Player_Reattach = m_Player.FindAction("Reattach", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_ActivatePowerup = m_Player.FindAction("ActivatePowerup", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -356,6 +465,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_GrabHead;
     private readonly InputAction m_Player_Reattach;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_ActivatePowerup;
     public struct PlayerActions
     {
         private @InputActions m_Wrapper;
@@ -365,6 +475,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @GrabHead => m_Wrapper.m_Player_GrabHead;
         public InputAction @Reattach => m_Wrapper.m_Player_Reattach;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @ActivatePowerup => m_Wrapper.m_Player_ActivatePowerup;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -389,6 +500,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @ActivatePowerup.started += instance.OnActivatePowerup;
+            @ActivatePowerup.performed += instance.OnActivatePowerup;
+            @ActivatePowerup.canceled += instance.OnActivatePowerup;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -408,6 +522,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @ActivatePowerup.started -= instance.OnActivatePowerup;
+            @ActivatePowerup.performed -= instance.OnActivatePowerup;
+            @ActivatePowerup.canceled -= instance.OnActivatePowerup;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -477,5 +594,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnGrabHead(InputAction.CallbackContext context);
         void OnReattach(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnActivatePowerup(InputAction.CallbackContext context);
     }
 }

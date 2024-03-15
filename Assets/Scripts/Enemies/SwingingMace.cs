@@ -3,7 +3,7 @@ using UnityEngine;
 public class SwingingMace : MonoBehaviour
 {
     public float swingDuration = 2f; // Duration of one swing from side to side
-    private float swingTimer = 0f; // Timer to track the progress of the swing
+    public float swingTimer = 0f; // Timer to track the progress of the swing
     private bool swingingRight = true; // Direction of the swing
     private float offsetFromCenter; // Dynamically calculated based on the object's dimensions
 
@@ -15,34 +15,34 @@ public class SwingingMace : MonoBehaviour
     {
         Swing();
     }
-private void Swing()
-{
-    // Increment or decrement the timer based on the swing direction
-    swingTimer += (swingingRight ? 1 : -1) * Time.deltaTime;
-
-    // When the swing reaches its duration, reverse the direction
-    if (swingTimer > swingDuration)
+    private void Swing()
     {
-        swingingRight = false;
-        swingTimer = swingDuration;
+        // Increment or decrement the timer based on the swing direction
+        swingTimer += (swingingRight ? 1 : -1) * Time.deltaTime;
+
+        // When the swing reaches its duration, reverse the direction
+        if (swingTimer > swingDuration)
+        {
+            swingingRight = false;
+            swingTimer = swingDuration;
+        }
+        else if (swingTimer < 0)
+        {
+            swingingRight = true;
+            swingTimer = 0;
+        }
+
+        // Calculate the normalized time of the swing
+        float normalizedTime = swingTimer / swingDuration;
+        // Apply cubic easing in and out
+        float angle = SwingCubicTween(normalizedTime) * 180f - 90f; // Adjust range to [-90, 90] degrees
+
+        // Define the pivot point closer to the top of the mace
+        Vector3 pivotPoint = transform.position + transform.up * offsetFromCenter; // 'offsetFromCenter' should be defined based on your object's size
+
+        // Rotate around the new pivot point
+        transform.RotateAround(pivotPoint, Vector3.forward, angle - transform.eulerAngles.z);
     }
-    else if (swingTimer < 0)
-    {
-        swingingRight = true;
-        swingTimer = 0;
-    }
-
-    // Calculate the normalized time of the swing
-    float normalizedTime = swingTimer / swingDuration;
-    // Apply cubic easing in and out
-    float angle = SwingCubicTween(normalizedTime) * 180f - 90f; // Adjust range to [-90, 90] degrees
-
-    // Define the pivot point closer to the top of the mace
-    Vector3 pivotPoint = transform.position + transform.up * offsetFromCenter; // 'offsetFromCenter' should be defined based on your object's size
-
-    // Rotate around the new pivot point
-    transform.RotateAround(pivotPoint, Vector3.forward, angle - transform.eulerAngles.z);
-}
 
 
     private float SwingCubicTween(float t)

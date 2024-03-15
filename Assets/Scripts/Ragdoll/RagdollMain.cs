@@ -23,7 +23,7 @@ public class RagdollMain : MonoBehaviour, IManageable
     private Rigidbody2D rb;
     private GroundChecker groundChecker;
     private InteractionManager interactionManager;
-    private HealthSystem healthManager;
+    public HealthSystem healthManager;
 
 
     public GameObject ragdollHead;
@@ -43,6 +43,8 @@ public class RagdollMain : MonoBehaviour, IManageable
     private bool inCutscene = false;
     private GameManager gameManager;
 
+    private ItemManager itemManager;
+
     //Public Runtime Variables 
     public Vector3 respawnPoint;
 
@@ -52,10 +54,10 @@ public class RagdollMain : MonoBehaviour, IManageable
     [SerializeField] public float moveSpeed;
     [SerializeField] private float jumpPower;
     [SerializeField] private float headClamp;
-    [SerializeField] private float headMeter;
+    [SerializeField] public float headMeter;
     [SerializeField] private float headGravity;
     [SerializeField] private float headYOffset;
-    [SerializeField] private float maxHeadMeter;
+    [SerializeField] public float maxHeadMeter;
     [SerializeField] private float slingshotForceMultiplier;
     [SerializeField] private Sprite ragDollBodySprite;
     [SerializeField] private Sprite ragDollHeadSprite;
@@ -75,6 +77,7 @@ public class RagdollMain : MonoBehaviour, IManageable
         public InputAction grabHead; //Default: Left Mouse Button
         public InputAction jump; // Default: Space
         public InputAction interact; //Default: E
+        public InputAction activatePowerup; //1-7 (or 1-9 maybe)
     }
 
     public playerActions playerControls;
@@ -99,6 +102,10 @@ public class RagdollMain : MonoBehaviour, IManageable
         playerControls.interact = playerControls.inputActions.Player.Interact;
         playerControls.interact.Enable();
         playerControls.interact.performed += interactionManager.Interact;
+
+        playerControls.activatePowerup = playerControls.inputActions.Player.ActivatePowerup;
+        playerControls.activatePowerup.Enable();
+        playerControls.activatePowerup.performed += OnActivatePowerup;
     }
 
     // Start is called before the first frame update
@@ -111,6 +118,7 @@ public class RagdollMain : MonoBehaviour, IManageable
         PlayerInput playerInput = GetComponent<PlayerInput>();
         interactionManager = transform.Find("InteractionManager").GetComponent<InteractionManager>();
         healthManager = gameObject.GetComponent<HealthSystem>();
+        itemManager = gameObject.AddComponent<ItemManager>();
 
         playerControls.inputActions = new InputActions();
         playerControls.inputActions.Enable();
@@ -132,7 +140,7 @@ public class RagdollMain : MonoBehaviour, IManageable
         // if taking damage then should fly back
         if (isDamaged && !groundChecker.isGrounded);
         else if (groundChecker.isGrounded) rb.velocity = new Vector2(movementInput.x * moveSpeed, rb.velocity.y);
-        else rb.velocity = new Vector2(movementInput.x * (moveSpeed / 2), rb.velocity.y);
+        else rb.velocity = new Vector2(movementInput.x * (moveSpeed / 1.25f), rb.velocity.y);
 
         // Im pretty sure we want the code above, because it makes it so that the things make you fly back when hit but idk lol gg xd no re fr fr on god no cap i swear bro dont read this plz if youve gotten this far then its already hopeless, there isnt any time left, you must stop reading before the torture sets in... the time has come... like doomguy getting an ultra kill, you will stare into death itself as ragdoll appears before you in real life, and just as you begin to fall asleep in hopes of finally being free once more he will appears in your dreams, staring at you, making you wonder what life has really come to, and then just like that youll be free... until he returns...
         // if (groundChecker.isGrounded == true) rb.velocity = new Vector2(movementInput.x * moveSpeed, rb.velocity.y);
@@ -218,6 +226,7 @@ public class RagdollMain : MonoBehaviour, IManageable
         }
     }
 
+    //// **** CHECKPOINTS **** ////
     public void ReleaseHead(InputAction.CallbackContext context)
     {
         if (context.canceled && !headCapturedByVice)
@@ -300,11 +309,14 @@ public class RagdollMain : MonoBehaviour, IManageable
         }
     }
 
+    //// **** ENEMIES **** ////
     public void TakeDamage (GameObject enemy, Vector2 collisionPoint)
     {
         // probably remove health, flash sprite, and then do anything specific to enemy. push back will likely be enemy specific
         if (!isDamaged) {
             isDamaged = true;
+            healthManager.hurt (1);
+
             StartCoroutine(IFrames(1.0f));
             GameObject ragdoll = GameObject.FindGameObjectWithTag("Ragdoll");
             SpriteRenderer[] sprites = ragdoll.GetComponentsInChildren<SpriteRenderer>();
@@ -345,7 +357,7 @@ public class RagdollMain : MonoBehaviour, IManageable
             {
                 StartCoroutine(DisableMovementCoroutine(disableMovementDuration));
                 // isGrounded = false;
-                rb.AddForce(direction * strength, ForceMode2D.Impulse);
+                rb.AddForce(direction * strength * 2, ForceMode2D.Impulse);
             } 
             
             // SUPER FUS RO DAH
@@ -393,6 +405,49 @@ public class RagdollMain : MonoBehaviour, IManageable
         rbHead.velocity = headVelocity;
     }
 
+    //// **** POWERUPS **** ////
+    
+    public void AddPowerup(Item powerup) {
+        itemManager.AddPowerup(powerup);
+        
+        // Assuming 'powerup' has a 'GameObject' property you can access.
+        if (powerup.GameObject().TryGetComponent<Renderer>(out var renderer))
+        {
+            renderer.enabled = false; // Make the powerup's object invisible.
+        }
+        
+        // Optional: If you also want to disable the powerup's collider.
+        if (powerup.GameObject().TryGetComponent<PolygonCollider2D>(out var collider))
+        {
+            Debug.Log("PolygonCollider2D disabled for powerup: " + powerup.type);
+            collider.enabled = false; // Make the powerup's object non-interactable for 2D physics.
+        }
+    }
+
+   
+    private void OnActivatePowerup(InputAction.CallbackContext context)
+    {
+        // Extract the key that triggered the action
+        string key = context.control.name; // This gives you the key name (e.g., "1", "2", etc.)
+        int index = int.Parse(key) - 1; // Convert key name to a zero-based index
+
+        // Activate the powerup corresponding to the pressed key
+        itemManager.ActivatePowerup(index);
+    }
+
+    public void ActivatePowerup(Item powerup)
+    {
+        Debug.Log("Activating " + powerup.type);
+        powerup.Use(this);
+    }
+
+    public void DeactivatePowerup(Item powerup)
+    {
+        Debug.Log("Deactivating " + powerup.type);
+        powerup.Reset(this);
+    }
+
+    //// **** CHECKPOINTS **** ////
     public void TogglePlayerVisible(bool toggle)
     {
         Debug.Log("thisran");

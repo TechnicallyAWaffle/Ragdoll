@@ -11,22 +11,10 @@ public class SpeedPowerup : Item
     public override void Use(RagdollMain ragdollMain)
     {
         ragdollMain.moveSpeed *= multiplier;
-        StartCoroutine(ResetSpeed(ragdollMain));
-
-        // Disable the visual representation and collider
-        if (TryGetComponent<Renderer>(out var renderer))
-        {
-            renderer.enabled = false; // Make the object invisible.
-        }
-        if (TryGetComponent<PolygonCollider2D>(out var collider))
-        {
-            Debug.Log("PolygonCollider2D disabled");
-            collider.enabled = false; // Make the object non-interactable for 2D physics.
-        }
+        StartCoroutine(Reset(ragdollMain));
     }
 
-
-    private IEnumerator ResetSpeed(RagdollMain ragdollMain)
+    public override IEnumerator Reset(RagdollMain ragdollMain)
     {
         yield return new WaitForSeconds(duration);
         ragdollMain.moveSpeed /= multiplier;
