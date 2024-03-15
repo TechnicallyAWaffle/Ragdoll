@@ -17,7 +17,7 @@ public class RagdollMain : MonoBehaviour, IManageable
     private bool isDamaged = false;
     public float flashDuration = 0.2f;
     public float numFlashes = 3;
-    public float pushForce = 10f;
+    public float pushForce = 5f;
     public bool flipped = false;
     public Sprite ragDollWholeSprite;
     private Rigidbody2D rb;
@@ -51,7 +51,7 @@ public class RagdollMain : MonoBehaviour, IManageable
 
     //Serialize
     [SerializeField] private float maxHealth;
-    [SerializeField] public float moveSpeed;
+    [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpPower;
     [SerializeField] private float headClamp;
     [SerializeField] public float headMeter;
@@ -326,30 +326,32 @@ public class RagdollMain : MonoBehaviour, IManageable
             }
             switch (enemy.tag) {
                 case "Scuttler":
-                    HitByScuttler (enemy, collisionPoint);
+                    HitByScuttler (enemy);
                 break;
                 case "Vice":
                     HitByVice (enemy);
                 break;
-                case "SwingingMace":
-                    HitByMace (enemy, collisionPoint);
-                break;
                 default:
-                    fusRoDah (enemy, collisionPoint, pushForce);
                 break;
             }
         }
     }
 
-    public void fusRoDah(GameObject enemy, Vector2 collisionPoint, float strength)
+    public void HitByScuttler (GameObject enemy)
     {
-        float disableMovementDuration = 0.5f; 
         Rigidbody2D rb = this.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            Vector2 direction = (new Vector2(this.transform.position.x, this.transform.position.y) - collisionPoint).normalized;
-            if (direction.x > 0.8) direction = new Vector2(0.8f, 0.6f);
-            if (direction.x < -0.8) direction = new Vector2(-0.8f, 0.6f);
+            Debug.Log("Hit by a cute lil scuttler");
+            Bounds bounds = enemy.GetComponent<SpriteRenderer>().bounds; // Assuming the object has a SpriteRenderer
+
+            float middleX = (bounds.min.x + bounds.max.x) / 2f;
+            float middleY = (bounds.min.y + bounds.max.y) / 2f;
+            Vector2 startPosition = new Vector2(middleX, middleY);
+            Vector2 ragdollStartPosition = new Vector2(this.transform.position.x, this.transform.position.y);
+            Vector2 direction = (ragdollStartPosition - startPosition).normalized;
+            if (direction.x > 0.8) direction = new Vector2 (0.8f, 0.6f);
+            if (direction.x < -0.8) direction = new Vector2 (-0.8f, 0.6f);
             rb.position = new Vector2(rb.position.x, rb.position.y + 0.1f);
 
             // regular push or whatever
@@ -367,23 +369,6 @@ public class RagdollMain : MonoBehaviour, IManageable
                 rb.AddForce(direction * strength * 10, ForceMode2D.Impulse);
             }
         }
-    }
-
-    private IEnumerator DisableMovementCoroutine(float duration)
-    {
-        playerControls.movement.Disable(); // Assuming 'movement' is your InputAction for movement
-        yield return new WaitForSeconds(duration);
-        playerControls.movement.Enable();
-    }
-
-    public void HitByScuttler (GameObject enemy, Vector2 collisionPoint)
-    {
-        fusRoDah (enemy, collisionPoint, pushForce);
-    }
-
-    public void HitByMace (GameObject enemy, Vector2 collisionPoint)
-    {
-        fusRoDah (enemy, collisionPoint, pushForce * 2);
     }
 
     public void HitByVice (GameObject enemy)
