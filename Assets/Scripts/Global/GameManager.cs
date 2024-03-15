@@ -14,8 +14,11 @@ public class GameManager : MonoBehaviour
     public RagdollMain ragdollMain;
     public AudioManager audioManager;
     public ItemManager itemManager;
-    // public InteractionManager interactionManager;
+    public InteractionManager interactionManager;
     public NPCManager npcManager;    //Global variables
+    public DialogueManager dialogueManager;
+
+    //Global variables
     public int currentLevel = 0;
     public int currentRegion = 1;
     public string nextLevel;
@@ -33,9 +36,10 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             DontDestroyOnLoad(fadeToBlack);
             // DontDestroyOnLoad(audioManager);
-            // DontDestroyOnLoad(interactionManager);
+            DontDestroyOnLoad(interactionManager);
             DontDestroyOnLoad(npcManager);
-            DontDestroyOnLoad(itemManager);            
+            DontDestroyOnLoad(itemManager); 
+            DontDestroyOnLoad(dialogueManager);           
             //audioManager.PlaySceneTrack();
         }
         else
@@ -51,7 +55,6 @@ public class GameManager : MonoBehaviour
 
     private void UpdateSceneData()
     {
-
         if (GameObject.FindGameObjectWithTag("SceneConfig"))
         {
             sceneConfig = GameObject.FindGameObjectWithTag("SceneConfig").GetComponent<SceneConfig>();

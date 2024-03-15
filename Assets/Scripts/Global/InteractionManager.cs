@@ -9,6 +9,7 @@ public class InteractionManager : MonoBehaviour
     public static InteractionManager Instance { get; private set; }
 
     [SerializeField] private GameObject EToInteract;
+    //For testing
     private GameObject thisEToInteract;
 
     private Pair currentPair;
@@ -92,4 +93,35 @@ public class InteractionManager : MonoBehaviour
         thisEToInteract.SetActive(true);
         thisEToInteract.transform.position = new Vector3(position.x, -1, -1); // Adjust as necessary
     }
+            // if (DialogueManager.GetInstance().dialogueIsPlaying)
+            //     DialogueManager.GetInstance().ContinueStory();
+            // thisEToInteract.SetActive(false);
+            // switch (currentNPC.name)
+            // {
+            //     case "Ms. Pretty":
+            //         //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.MSPRETTY));
+            //         DialogueManager.GetInstance().EnterDialogueMode(currentNPC.name, null, currentNPC.transform.Find("DialogueTemplate").gameObject);
+            //         break;
+            //     case "Pearce":
+            //         //Call GUI event
+            //         //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.PEARCE));
+            //         DialogueManager.GetInstance().EnterDialogueMode(currentNPC.name, null, currentNPC.transform.Find("DialogueTemplate").gameObject);
+            //         break;
+            //     case "Embrodyle":
+            //         //Store dropped items in lost items list in SceneLoader. Move one random one into inventory when this is called.
+            //         //Go on date
+            //         //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.EMBRODYLE));
+            //         DialogueManager.GetInstance().EnterDialogueMode(currentNPC.name, null, currentNPC.transform.Find("DialogueTemplate").gameObject);
+            //         break;
+            //     case "Inkwell":
+            //         //No inkwell theme yet
+            //         //Call GUI event
+            //         break;
+            //     case "Escort":
+            //         StartCoroutine(ragdollMain.GoToCheckpoint(currentNPC.transform.position, currentNPC.GetComponent<Animator>()));
+            //         DialogueManager.GetInstance().EnterDialogueMode(currentNPC.name, null, currentNPC.transform.Find("DialogueTemplate").gameObject);
+            //         break;
+            // }
+        // }
+    // }
 }
