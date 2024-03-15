@@ -123,7 +123,7 @@ public class NPCManager : MonoBehaviour
                         Debug.Log($"Spawned {npcName} at Position: {npcInstance.transform.position}");
 
                         placed = pairs[randomIndex].TryAddNPC(npcInstance);
-
+    
                         Animator npcAnimator = npcInstance.GetComponent<Animator>();
                         if (npcAnimator != null)
                         {
@@ -137,6 +137,9 @@ public class NPCManager : MonoBehaviour
                         else
                         {
                             Debug.Log($"Failed to place NPC: {npcName} at Pair index: {randomIndex}, Spawn Position: {adjustedSpawnPosition}");
+                            if (npcInstance) {
+                                Destroy (npcInstance);
+                            }
                         }
                     }
                     tryCount++;
