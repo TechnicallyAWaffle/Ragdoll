@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class InteractionManager : MonoBehaviour
 {
-    public static InteractionManager Instance { get; private set; }
+    //public static InteractionManager Instance { get; private set; }
 
     [SerializeField] private GameObject EToInteract;
     //For testing
@@ -17,15 +17,15 @@ public class InteractionManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        //if (Instance == null)
+       // {
+      //      Instance = this;
+     //       DontDestroyOnLoad(gameObject);
+     //   }
+     //   else
+     //   {
+     //       Destroy(gameObject);
+     //   }
     }
     private void Start()
     {
@@ -36,7 +36,7 @@ public class InteractionManager : MonoBehaviour
     {
         if (collision.CompareTag("Pair"))
         {
-            currentPair = collision.GetComponent<Pair>();
+            currentPair = collision.gameObject.GetComponent<Pair>();
             if (currentPair != null && currentPair.npcs.Count > 0)
             {
                 ActivateEToInteract(collision.transform.position);
@@ -44,7 +44,7 @@ public class InteractionManager : MonoBehaviour
         }
         else if (collision.CompareTag("Escort")) // Assuming "Escort" is the tag for your EscortMain object
         {
-            currentEscort = collision.GetComponent<EscortMain>();
+            currentEscort = collision.gameObject.GetComponent<EscortMain>();
             if (currentEscort != null)
             {
                 ActivateEToInteract(collision.transform.position);
@@ -66,6 +66,7 @@ public class InteractionManager : MonoBehaviour
     {
         if (context.performed)
         {
+            string speakers = "";
             if (currentPair != null)
             {
                 // Interact with NPCs in the Pair
@@ -74,6 +75,40 @@ public class InteractionManager : MonoBehaviour
                     Debug.Log($"Interacting with NPC: {npc.name}");
                 }
                 Debug.Log($"Total NPCs in this Pair: {currentPair.npcs.Count}");
+
+                if (DialogueManager.GetInstance().dialogueIsPlaying)
+                    DialogueManager.GetInstance().ContinueStory();
+                thisEToInteract.SetActive(false);
+                switch (speakers)
+                {
+                    case "Ms. Pretty":
+                        //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.MSPRETTY));
+                        DialogueManager.GetInstance().EnterDialogueMode(speakers);
+                        break;
+                    case "Pearce":
+                        //Call GUI event
+                        //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.PEARCE));
+                        DialogueManager.GetInstance().EnterDialogueMode(speakers);
+                        break;
+                    case "Embrodyle":
+                        //Store dropped items in lost items list in SceneLoader. Move one random one into inventory when this is called.
+                        //Go on date
+                        //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.EMBRODYLE));
+                        DialogueManager.GetInstance().EnterDialogueMode(speakers);
+                        break;
+                    case "Inkwell":
+                        //No inkwell theme yet
+                        //Call GUI event
+                        break;
+                    case "Escort":
+                        //StartCoroutine(ragdollMain.GoToCheckpoint(currentNPC.transform.position, currentNPC.GetComponent<Animator>()));
+                        DialogueManager.GetInstance().EnterDialogueMode(speakers);
+                        break;
+                    case "":
+                        Debug.Log("test1ran");
+                        DialogueManager.GetInstance().EnterDialogueMode(speakers);
+                        break;
+                }
             }
             else if (currentEscort != null)
             {
@@ -93,35 +128,5 @@ public class InteractionManager : MonoBehaviour
         thisEToInteract.SetActive(true);
         thisEToInteract.transform.position = new Vector3(position.x, -1, -1); // Adjust as necessary
     }
-            // if (DialogueManager.GetInstance().dialogueIsPlaying)
-            //     DialogueManager.GetInstance().ContinueStory();
-            // thisEToInteract.SetActive(false);
-            // switch (currentNPC.name)
-            // {
-            //     case "Ms. Pretty":
-            //         //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.MSPRETTY));
-            //         DialogueManager.GetInstance().EnterDialogueMode(currentNPC.name, null, currentNPC.transform.Find("DialogueTemplate").gameObject);
-            //         break;
-            //     case "Pearce":
-            //         //Call GUI event
-            //         //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.PEARCE));
-            //         DialogueManager.GetInstance().EnterDialogueMode(currentNPC.name, null, currentNPC.transform.Find("DialogueTemplate").gameObject);
-            //         break;
-            //     case "Embrodyle":
-            //         //Store dropped items in lost items list in SceneLoader. Move one random one into inventory when this is called.
-            //         //Go on date
-            //         //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.EMBRODYLE));
-            //         DialogueManager.GetInstance().EnterDialogueMode(currentNPC.name, null, currentNPC.transform.Find("DialogueTemplate").gameObject);
-            //         break;
-            //     case "Inkwell":
-            //         //No inkwell theme yet
-            //         //Call GUI event
-            //         break;
-            //     case "Escort":
-            //         StartCoroutine(ragdollMain.GoToCheckpoint(currentNPC.transform.position, currentNPC.GetComponent<Animator>()));
-            //         DialogueManager.GetInstance().EnterDialogueMode(currentNPC.name, null, currentNPC.transform.Find("DialogueTemplate").gameObject);
-            //         break;
-            // }
-        // }
-    // }
+
 }

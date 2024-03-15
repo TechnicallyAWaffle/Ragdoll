@@ -1955,6 +1955,10 @@ PrefabInstance:
       propertyPath: npcName
       value: Embrodyle
       objectReference: {fileID: 0}
+    - target: {fileID: 5524930293858582778, guid: 9da854f394e584d2a9508fbf7929109e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7699123611226099425, guid: 9da854f394e584d2a9508fbf7929109e, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
@@ -1978,7 +1982,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 656810906873400908, guid: ad2ec76c38e7fb646a6f3162b740b157, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.017500026
+      value: -0.017500116
       objectReference: {fileID: 0}
     - target: {fileID: 656810906873400908, guid: ad2ec76c38e7fb646a6f3162b740b157, type: 3}
       propertyPath: m_LocalPosition.y

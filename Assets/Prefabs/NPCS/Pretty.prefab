@@ -31,9 +31,10 @@ Transform:
   m_LocalPosition: {x: -19.4, y: 0.03, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 641425751122606071}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8355729057639435232
 SpriteRenderer:
@@ -144,9 +145,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a94f9d5cdc9d145e5b10a7951ed3ab7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcName: 
-  npcSprite: {fileID: 0}
+  name: 
   npcAnimator: {fileID: 7752242985207970882}
+  dialoguePanel: {fileID: 0}
+  dialogueText: {fileID: 0}
+  dialogue: []
+  contButton: {fileID: 0}
+  wordSpeed: 0
+  playerIsClose: 0
 --- !u!95 &7752242985207970882
 Animator:
   serializedVersion: 5
@@ -168,3 +174,69 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1001 &7076968833469702461
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1941591975487480286}
+    m_Modifications:
+    - target: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.047
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.624
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8702842896794514465, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+      propertyPath: m_Name
+      value: DialogueTemplate
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+--- !u!4 &641425751122606071 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7696859548862879434, guid: ebc4c320c18286746823328ae8d2b3e0, type: 3}
+  m_PrefabInstance: {fileID: 7076968833469702461}
+  m_PrefabAsset: {fileID: 0}

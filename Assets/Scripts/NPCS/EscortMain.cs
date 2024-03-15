@@ -12,7 +12,7 @@ public class EscortMain : MonoBehaviour
         gameObject.GetComponent<Animator>().SetBool("isOpen", false);
         GameManager.Instance.ragdollMain.TogglePlayerVisible(true);
         GameManager.Instance.ragdollMain.gameObject.GetComponent<PlayerInput>().enabled = true;
-        InteractionManager.Instance.GetComponent<BoxCollider2D>().enabled = true;
+        GameManager.Instance.ragdollMain.gameObject.transform.Find("InteractionManager").GetComponent<BoxCollider2D>().enabled = true;
     }
 
     public void EnterAnimationEnd()

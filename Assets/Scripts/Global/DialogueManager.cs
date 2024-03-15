@@ -55,14 +55,9 @@ public class DialogueManager : MonoBehaviour
 
 
     //Grabs dialogue from inkJson file & displays it to screen (used in DialogueTrigger.cs)
-    public void EnterDialogueMode(string characterName, string secondaryCharacterName, GameObject dialogueTemplate)
-    {
-        dialoguePanel = dialogueTemplate;
-        dialogueText = dialogueTemplate.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-        string speakers = characterName;
-        if (secondaryCharacterName != null)
-            speakers = characterName + secondaryCharacterName;
-        switch (characterName)
+    public void EnterDialogueMode(string speakers)
+    {;
+        switch (speakers)
         {
             case "Pearce":
                 currentStory = new Story(pearceDialogue.text);
@@ -79,6 +74,11 @@ public class DialogueManager : MonoBehaviour
             case "Janus":
                 //currentStory = new Story(janusDialogue.text);
                 //currentStory.variablesState["speakers"] = speakers;
+                break;
+            case "":
+                Debug.Log("test2ran");
+                currentStory = new Story(msPrettyDialogue.text);
+                currentStory.variablesState["speakers"] = "SOLO";
                 break;
         }
         dialogueIsPlaying = true;

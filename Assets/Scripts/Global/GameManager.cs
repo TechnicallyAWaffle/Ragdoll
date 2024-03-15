@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             DontDestroyOnLoad(fadeToBlack);
             // DontDestroyOnLoad(audioManager);
-            DontDestroyOnLoad(interactionManager);
+            //DontDestroyOnLoad(interactionManager);
             DontDestroyOnLoad(npcManager);
             DontDestroyOnLoad(itemManager); 
             DontDestroyOnLoad(dialogueManager);           

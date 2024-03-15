@@ -40,6 +40,7 @@ public class RagdollMain : MonoBehaviour
     private float health;
     private float currentHeadClamp;
     private bool inCutscene = false;
+    private InteractionManager interactionManager;
 
     //Public Runtime Variables 
     public Vector3 respawnPoint;
@@ -97,7 +98,7 @@ public class RagdollMain : MonoBehaviour
 
         playerControls.interact = playerControls.inputActions.Player.Interact;
         playerControls.interact.Enable();
-        playerControls.interact.performed += InteractionManager.Instance.Interact;
+        playerControls.interact.performed += interactionManager.Interact;
 
         playerControls.activatePowerup = playerControls.inputActions.Player.ActivatePowerup;
         playerControls.activatePowerup.Enable();
@@ -113,7 +114,7 @@ public class RagdollMain : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         groundChecker = transform.Find("GroundChecker").GetComponent<GroundChecker>();
         PlayerInput playerInput = GetComponent<PlayerInput>();
-        // interactionManager = transform.Find("InteractionManager").GetComponent<InteractionManager>();
+        interactionManager = transform.Find("InteractionManager").GetComponent<InteractionManager>();
         healthManager = gameObject.GetComponent<HealthSystem>();
         // itemManager = gameObject.AddComponent<ItemManager>();
 
@@ -254,6 +255,8 @@ public class RagdollMain : MonoBehaviour
                 rbHead.gravityScale = headGravity;
                 rbHead.AddForce((headAnchor.transform.position - ragdollHead.transform.position) * ((headAnchor.transform.position - ragdollHead.transform.position).magnitude * slingshotForceMultiplier), ForceMode2D.Impulse);
                 Debug.Log(headAnchor.transform.position * (headAnchor.transform.position - ragdollHead.transform.position).magnitude);
+                gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(0.5f, 0.9f);
+                gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.1f);
             }
         }
     }
@@ -276,6 +279,9 @@ public class RagdollMain : MonoBehaviour
         headMeter = maxHeadMeter;
         lineRenderer.enabled = false;
         headCapturedByVice = false;
+
+        gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(0.5f, 1.25f);
+        gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.3f);
     }
 
     private void UpdateTether()
