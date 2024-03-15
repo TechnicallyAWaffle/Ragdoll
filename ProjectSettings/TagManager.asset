@@ -18,6 +18,8 @@ TagManager:
   - NPC
   - SwingingMace
   - SceneConfig
+  - Pair
+  - Escort
   layers:
   - Default
   - TransparentFX

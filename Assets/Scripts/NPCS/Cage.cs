@@ -22,6 +22,7 @@ public class Cage : MonoBehaviour
     private void UnlockNPC()
     {
         cageAnimator.SetTrigger("Unlock");
+        containedNPC.GetComponent<Animator>().SetTrigger("Unlock");
         containedNPC.gameObject.SetActive(true);
         GetComponent<Collider2D>().enabled = false;
         NPCManager.Instance.NPCUnlocked(containedNPC);

@@ -13,11 +13,15 @@ public class Catnip : Item
         Debug.Log ("Previous head meter: " + ragdollMain.headMeter);
         ragdollMain.headMeter = ragdollMain.maxHeadMeter;
         Debug.Log ("Post head meter: " + ragdollMain.headMeter);
+        ItemManager.Instance.RemovePowerup(this);
+        Destroy (gameObject);
     }
 
     // Since the effect is instant and does not have a duration, we do not need to implement Reset
     public override IEnumerator Reset(RagdollMain ragdollMain)
     {
+        // ItemManager.Instance.RemovePowerup(this);
+        // Destroy (gameObject);
         // No reset logic is required for an instant effect
         yield break;
     }

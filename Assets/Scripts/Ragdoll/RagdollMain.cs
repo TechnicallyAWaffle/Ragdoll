@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-public class RagdollMain : MonoBehaviour, IManageable
+public class RagdollMain : MonoBehaviour
 {
 
     //Initialize
@@ -22,7 +22,6 @@ public class RagdollMain : MonoBehaviour, IManageable
     public Sprite ragDollWholeSprite;
     private Rigidbody2D rb;
     private GroundChecker groundChecker;
-    private InteractionManager interactionManager;
     public HealthSystem healthManager;
 
 
@@ -41,9 +40,6 @@ public class RagdollMain : MonoBehaviour, IManageable
     private float health;
     private float currentHeadClamp;
     private bool inCutscene = false;
-    private GameManager gameManager;
-
-    private ItemManager itemManager;
 
     //Public Runtime Variables 
     public Vector3 respawnPoint;
@@ -101,11 +97,12 @@ public class RagdollMain : MonoBehaviour, IManageable
 
         playerControls.interact = playerControls.inputActions.Player.Interact;
         playerControls.interact.Enable();
-        playerControls.interact.performed += interactionManager.Interact;
+        playerControls.interact.performed += InteractionManager.Instance.Interact;
 
         playerControls.activatePowerup = playerControls.inputActions.Player.ActivatePowerup;
         playerControls.activatePowerup.Enable();
         playerControls.activatePowerup.performed += OnActivatePowerup;
+
     }
 
     // Start is called before the first frame update
@@ -116,9 +113,9 @@ public class RagdollMain : MonoBehaviour, IManageable
         rb = GetComponent<Rigidbody2D>();
         groundChecker = transform.Find("GroundChecker").GetComponent<GroundChecker>();
         PlayerInput playerInput = GetComponent<PlayerInput>();
-        interactionManager = transform.Find("InteractionManager").GetComponent<InteractionManager>();
+        // interactionManager = transform.Find("InteractionManager").GetComponent<InteractionManager>();
         healthManager = gameObject.GetComponent<HealthSystem>();
-        itemManager = gameObject.AddComponent<ItemManager>();
+        // itemManager = gameObject.AddComponent<ItemManager>();
 
         playerControls.inputActions = new InputActions();
         playerControls.inputActions.Enable();
@@ -192,6 +189,16 @@ public class RagdollMain : MonoBehaviour, IManageable
         }
     }
 
+    public void OnActivatePowerup(InputAction.CallbackContext context)
+    {
+        // Extract the key that triggered the action
+        string key = context.control.name; // This gives you the key name (e.g., "1", "2", etc.)
+        int index = int.Parse(key) - 1; // Convert key name to a zero-based index
+
+        // Activate the powerup corresponding to the pressed key
+        ItemManager.Instance.ActivatePowerup(index);
+    }
+
     public void GrabHead(InputAction.CallbackContext context)
     {
         if (context.started && !headCapturedByVice)
@@ -256,6 +263,9 @@ public class RagdollMain : MonoBehaviour, IManageable
         ragdollHead.transform.parent = transform;
         isSeparated = false;
         headGrabbed = false;
+
+        // make ragdoll look left to fix issue
+        transform.localScale = new Vector3(1, 1, 1);
         currentHeadClamp = headClamp;
         ragdollHead.transform.localPosition = new Vector3(-0.035f, 0.575f, 0); //Hardcoded offset since the sprite center is different from the imported sprite :(
         rbHead.bodyType = RigidbodyType2D.Kinematic;
@@ -405,47 +415,6 @@ public class RagdollMain : MonoBehaviour, IManageable
         rbHead.velocity = headVelocity;
     }
 
-    //// **** POWERUPS **** ////    
-    public void AddPowerup(Item powerup) {
-        itemManager.AddPowerup(powerup);
-        
-        // Assuming 'powerup' has a 'GameObject' property you can access.
-        if (powerup.GameObject().TryGetComponent<Renderer>(out var renderer))
-        {
-            renderer.enabled = false; // Make the powerup's object invisible.
-        }
-        
-        // Optional: If you also want to disable the powerup's collider.
-        if (powerup.GameObject().TryGetComponent<PolygonCollider2D>(out var collider))
-        {
-            Debug.Log("PolygonCollider2D disabled for powerup: " + powerup.type);
-            collider.enabled = false; // Make the powerup's object non-interactable for 2D physics.
-        }
-    }
-
-   
-    private void OnActivatePowerup(InputAction.CallbackContext context)
-    {
-        // Extract the key that triggered the action
-        string key = context.control.name; // This gives you the key name (e.g., "1", "2", etc.)
-        int index = int.Parse(key) - 1; // Convert key name to a zero-based index
-
-        // Activate the powerup corresponding to the pressed key
-        itemManager.ActivatePowerup(index);
-    }
-
-    public void ActivatePowerup(Item powerup)
-    {
-        Debug.Log("Activating " + powerup.type);
-        powerup.Use(this);
-    }
-
-    public void DeactivatePowerup(Item powerup)
-    {
-        Debug.Log("Deactivating " + powerup.type);
-        powerup.Reset(this);
-    }
-
     //// **** CHECKPOINTS **** ////
     public void TogglePlayerVisible(bool toggle)
     {
@@ -454,15 +423,6 @@ public class RagdollMain : MonoBehaviour, IManageable
         ragdollHead.GetComponent<SpriteRenderer>().enabled = toggle;
         ragdollTieLeft.GetComponent<SpriteRenderer>().enabled = toggle;
         ragdollTieRight.GetComponent<SpriteRenderer>().enabled = toggle;
-    }
-
-    public void GetGameManager(GameManager gameManager)
-    {
-        this.gameManager = gameManager;
-        interactionManager.ragdollMain = this;
-        interactionManager.audioManager = gameManager.audioManager;
-        interactionManager.ragdollHealth = healthManager;
-
     }
 
     public IEnumerator GoToCheckpoint(Vector3 targetPosition, Animator escortAnimator)
@@ -485,7 +445,7 @@ public class RagdollMain : MonoBehaviour, IManageable
         }
         escortAnimator.SetTrigger("CheckpointEnter");
         yield return new WaitForSeconds(0.15f);
-        Destroy(gameObject);
+        // Destroy(gameObject);
     }
 
     IEnumerator FlashSprite(SpriteRenderer sprite)

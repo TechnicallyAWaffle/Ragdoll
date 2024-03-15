@@ -6,13 +6,15 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    
+    public static GameManager Instance { get; private set; } // Singleton instance
+
     [SerializeField] private GameObject fadeToBlack;
 
     private SceneConfig sceneConfig;
     public RagdollMain ragdollMain;
     public AudioManager audioManager;
     public ItemManager itemManager;
+    // public InteractionManager interactionManager;
     public NPCManager npcManager;    //Global variables
     public int currentLevel = 0;
     public int currentRegion = 1;
@@ -25,11 +27,21 @@ public class GameManager : MonoBehaviour
         //FOR TESTING PURPOSES ONLY
         //audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 
-        DontDestroyOnLoad(gameObject);
-        DontDestroyOnLoad(fadeToBlack);
-        DontDestroyOnLoad(audioManager);
-        DontDestroyOnLoad(npcManager);
-        //audioManager.PlaySceneTrack();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(fadeToBlack);
+            // DontDestroyOnLoad(audioManager);
+            // DontDestroyOnLoad(interactionManager);
+            DontDestroyOnLoad(npcManager);
+            DontDestroyOnLoad(itemManager);            
+            //audioManager.PlaySceneTrack();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void LoadSceneFromButton(string sceneName)
@@ -43,8 +55,8 @@ public class GameManager : MonoBehaviour
         if (GameObject.FindGameObjectWithTag("SceneConfig"))
         {
             sceneConfig = GameObject.FindGameObjectWithTag("SceneConfig").GetComponent<SceneConfig>();
-            foreach (GameObject element in sceneConfig.needReference)
-                element.GetComponent<IManageable>().GetGameManager(this);
+            // foreach (GameObject element in sceneConfig.needReference)
+            //     element.GetComponent<IManageable>().GetGameManager(this);
 
             //Get ragdoll reference
             this.ragdollMain = sceneConfig.ragdoll.GetComponent<RagdollMain>();
@@ -53,12 +65,14 @@ public class GameManager : MonoBehaviour
             ragdollMain.respawnPoint = sceneConfig.respawnPoint;
             ragdollMain.gameObject.transform.position = ragdollMain.respawnPoint;
 
+            Debug.Log ("Fade");
             //Fade out screen
             fadeToBlack.GetComponent<Animator>().SetTrigger("FadeOut");
 
             //Set escort destination and animation state
             sceneConfig.escort.GetComponent<EscortMain>().destination = nextLevel;
             sceneConfig.escort.GetComponent<Animator>().SetBool("isOpen", true);
+            Debug.Log ("unfade");
         }
         else
             Debug.Log("No SceneConfig found!");
@@ -85,6 +99,7 @@ public class GameManager : MonoBehaviour
             sceneConfig.escort.GetComponent<Animator>().SetTrigger("CheckpointExit");
             if (sceneName == "Hub Area")
             {
+                npcManager.SpawnAndArrangeNPCsInHubArea();
                 nextLevel = currentRegion + "-" + currentLevel;
                 sceneConfig.escort.GetComponent<EscortMain>().destination = nextLevel;
             }

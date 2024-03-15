@@ -1,87 +1,96 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class ItemManager : MonoBehaviour
 {
-    private int numPowerups;
-    private int maxPowerupsPerType;
-    private List<List<Item>> storedPowerups;
-    private List<Item> activePowerups;
-    private RagdollMain ragdollMain;
+    public static ItemManager Instance { get; private set; }
+
+    private Item[] storedPowerups = new Item[3]; // Array to hold up to 3 items
 
     void Awake()
     {
-        numPowerups = 7;
-        maxPowerupsPerType = 3;
-        storedPowerups = new List<List<Item>>(numPowerups);
-        for (int i = 0; i < numPowerups; i++)
+        if (Instance == null)
         {
-            storedPowerups.Add(new List<Item>(maxPowerupsPerType)); // Initialize with inner lists
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        activePowerups = new List<Item>(numPowerups);
-        for (int i = 0; i < numPowerups; i++)
+        else
         {
-            activePowerups.Add(null); // Initialize all to null
-        }
-        GameObject ragdollObject = GameObject.FindGameObjectWithTag("Ragdoll");
-        if (ragdollObject != null)
-        {
-            ragdollMain = ragdollObject.GetComponent<RagdollMain>();
+            Destroy(gameObject);
         }
     }
 
-    public void AddPowerup(Item powerup)
+    public bool AddPowerup(Item powerup)
     {
-        int index = GetPowerupIndex(powerup);
-        Debug.Log("Adding powerup: " + powerup.type);
-        if (index != -1 && storedPowerups[index].Count < maxPowerupsPerType)
+        for (int i = 0; i < storedPowerups.Length; i++)
         {
-            storedPowerups[index].Add(powerup); // Add to the appropriate sublist
-        } else if (index != -1) {
-            Debug.Log("Invalid index");
+            if (storedPowerups[i] == null)
+            {
+                storedPowerups[i] = powerup;
+                Debug.Log("Powerup added: " + powerup.type);
+
+                // Disable the sprite renderer to not display the sprite
+                SpriteRenderer spriteRenderer = powerup.gameObject.GetComponent<SpriteRenderer>();
+                if (spriteRenderer != null)
+                {
+                    spriteRenderer.enabled = false;
+                }
+
+                // Disable any colliders to prevent collision detection
+                Collider2D collider = powerup.gameObject.GetComponent<Collider2D>();
+                if (collider != null)
+                {
+                    collider.enabled = false;
+                }
+
+                return true; // Successfully added powerup
+            }
         }
+        Debug.Log("Inventory full, cannot add more powerups.");
+        return false; // Inventory full
     }
+
 
     public void ActivatePowerup(int index)
     {
-        if (ragdollMain == null || index < 0 || index >= storedPowerups.Count || storedPowerups[index] == null || storedPowerups[index].Count == 0)
+        if (index >= 0 && index < storedPowerups.Length && storedPowerups[index] != null)
         {
-            Debug.Log ("Invalid index: " + index);
-            return; // Invalid index or no powerups of this type
+            Item powerup = storedPowerups[index];
+            Debug.Log("Activating powerup: " + powerup.type);
+
+            powerup.Use(GameManager.Instance.ragdollMain); // Activate the powerup
         }
-
-        Item powerup = storedPowerups[index][0];
-        Debug.Log("Activating powerup: " + powerup.type);
-
-        storedPowerups[index].RemoveAt(0); // This will affect the index of remaining powerups
-        activePowerups[index] = powerup; // Mark the powerup as active
-
-        ragdollMain.ActivatePowerup(powerup);
-        StartCoroutine(DeactivateAfterDelay(powerup, index));
-    }
-
-    private IEnumerator DeactivateAfterDelay(Item powerup, int index)
-    {
-        yield return new WaitForSeconds(powerup.duration);
-        Debug.Log("Deactivating powerup: " + powerup.type);
-        ragdollMain.DeactivatePowerup(powerup);
-        activePowerups[index] = null;
-        Destroy(powerup);
-    }
-
-    private int GetPowerupIndex(Item powerup)
-    {
-        switch (powerup.type)
+        else
         {
-            case "TreatCrumbs": return 0;
-            case "FishTreat": return 1;
-            case "BagOfTreats": return 2;
-            case "GuardianCat": return 3;
-            case "CatToy": return 4;
-            case "Catnip": return 5;
-            case "Speed": return 6;
-            default: return -1;
+            Debug.Log("Invalid slot index or no powerup in this slot.");
+        }
+    }
+
+    public void Deactivate(Item powerup)
+    {
+        // Wait for the reset logic to complete
+        Debug.Log("Deactivating powerup: " + powerup.type);
+
+        RemovePowerup(powerup);
+
+        // Ensure safe deactivation
+        if (powerup != null && powerup.gameObject != null)
+        {
+            Destroy(powerup.gameObject); // Now safe to destroy
+        }
+    }
+
+    public void RemovePowerup(Item powerup)
+    {
+        for (int i = 0; i < storedPowerups.Length; i++)
+        {
+            if (storedPowerups[i] == powerup)
+            {
+                storedPowerups[i] = null; // Remove the reference from the array
+                Debug.Log("Powerup removed: " + powerup.type);
+                break; // Exit the loop once the item is found and removed
+            }
         }
     }
 }

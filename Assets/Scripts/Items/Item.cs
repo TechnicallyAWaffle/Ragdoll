@@ -12,6 +12,7 @@ public abstract class Item : MonoBehaviour
     public string type;
     public float multiplier;
     public float duration;
+    public Coroutine resetCoroutine;
 
     // Constructor to set basic item properties
     protected Item(int price, string description, string type, float multiplier, float duration, int grade)
@@ -26,7 +27,16 @@ public abstract class Item : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("Ragdoll") || collider.gameObject.CompareTag("RagdollHead"))
+        if ((collider.gameObject.CompareTag("Ragdoll") || collider.gameObject.CompareTag("RagdollHead")) && this.type != "Catnip")
+        {
+            // Try adding the item to the ItemManager
+            if (ItemManager.Instance.AddPowerup(this))
+            {
+                // If successful, disable the GameObject here or within ItemManager
+                // gameObject.SetActive(false); // Disable this item's GameObject
+            }
+        }
+        else if (this.type == "Catnip")
         {
             GameObject ragdollObject = GameObject.FindGameObjectWithTag("Ragdoll");
             if (ragdollObject != null)
@@ -34,7 +44,7 @@ public abstract class Item : MonoBehaviour
                 RagdollMain ragdollMain = ragdollObject.GetComponent<RagdollMain>();
                 if (ragdollMain != null)
                 {
-                    ragdollMain.AddPowerup(this);
+                    this.Use(ragdollMain); // Use the Catnip item instantly
                 }
             }
         }

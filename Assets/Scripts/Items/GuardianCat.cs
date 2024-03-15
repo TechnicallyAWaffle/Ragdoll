@@ -11,22 +11,17 @@ public class GuardianCat : Item
 
     public override void Use(RagdollMain ragdollMain)
     {
-        // Save the original max health before changing
         originalMaxHealth = ragdollMain.healthManager.getMaxHealth();
-
-        // Set the new max health to 9
         ragdollMain.healthManager.setMaxHealth((int)multiplier);
 
-        // Start the coroutine to reset the max health after 15 seconds
+        // Safe to start the coroutine here and keep a reference to it in the base class
         StartCoroutine(Reset(ragdollMain));
     }
 
     public override IEnumerator Reset(RagdollMain ragdollMain)
     {
-        // Wait for the duration of the powerup effect
         yield return new WaitForSeconds(duration);
-
-        // Reset the max health to its original value
         ragdollMain.healthManager.setMaxHealth(originalMaxHealth);
+        ItemManager.Instance.Deactivate(this);
     }
 }
