@@ -82,18 +82,18 @@ public class InteractionManager : MonoBehaviour
                 switch (speakers)
                 {
                     case "Ms. Pretty":
-                        //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.MSPRETTY));
+                        AudioManager.GetInstance().StartCoroutine(AudioManager.GetInstance().ChangeHubCharacterTrack(AudioManager.HubTracks.MSPRETTY));
                         DialogueManager.GetInstance().EnterDialogueMode(speakers);
                         break;
                     case "Pearce":
                         //Call GUI event
-                        //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.PEARCE));
+                        AudioManager.GetInstance().StartCoroutine(AudioManager.GetInstance().ChangeHubCharacterTrack(AudioManager.HubTracks.PEARCE));
                         DialogueManager.GetInstance().EnterDialogueMode(speakers);
                         break;
                     case "Embrodyle":
                         //Store dropped items in lost items list in SceneLoader. Move one random one into inventory when this is called.
                         //Go on date
-                        //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.EMBRODYLE));
+                        AudioManager.GetInstance().StartCoroutine(AudioManager.GetInstance().ChangeHubCharacterTrack(AudioManager.HubTracks.EMBRODYLE));
                         DialogueManager.GetInstance().EnterDialogueMode(speakers);
                         break;
                     case "Inkwell":
