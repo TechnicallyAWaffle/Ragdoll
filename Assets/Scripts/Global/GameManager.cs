@@ -12,8 +12,8 @@ public class GameManager : MonoBehaviour
     private SceneConfig sceneConfig;
     public RagdollMain ragdollMain;
     public AudioManager audioManager;
-
-    //Global variables
+    public ItemManager itemManager;
+    public NPCManager npcManager;    //Global variables
     public int currentLevel = 0;
     public int currentRegion = 1;
     public string nextLevel;
@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         DontDestroyOnLoad(fadeToBlack);
         DontDestroyOnLoad(audioManager);
-
+        DontDestroyOnLoad(npcManager);
         //audioManager.PlaySceneTrack();
     }
 

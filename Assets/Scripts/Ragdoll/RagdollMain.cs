@@ -138,7 +138,7 @@ public class RagdollMain : MonoBehaviour, IManageable
             animator.SetBool("isMoving", false);
 
         // if taking damage then should fly back
-        if (isDamaged && !groundChecker.isGrounded);
+        if (isDamaged && !groundChecker.isGrounded){}
         else if (groundChecker.isGrounded) rb.velocity = new Vector2(movementInput.x * moveSpeed, rb.velocity.y);
         else rb.velocity = new Vector2(movementInput.x * (moveSpeed / 1.25f), rb.velocity.y);
 
@@ -405,8 +405,7 @@ public class RagdollMain : MonoBehaviour, IManageable
         rbHead.velocity = headVelocity;
     }
 
-    //// **** POWERUPS **** ////
-    
+    //// **** POWERUPS **** ////    
     public void AddPowerup(Item powerup) {
         itemManager.AddPowerup(powerup);
         
@@ -504,5 +503,4 @@ public class RagdollMain : MonoBehaviour, IManageable
         yield return new WaitForSeconds(seconds);
         isDamaged = false;
     }
-
 }
