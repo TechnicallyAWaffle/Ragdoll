@@ -12,6 +12,8 @@ public abstract class Item : MonoBehaviour
     public string type;
     public float multiplier;
     public float duration;
+    public bool IsActive = false;
+
     public Coroutine resetCoroutine;
 
     // Constructor to set basic item properties

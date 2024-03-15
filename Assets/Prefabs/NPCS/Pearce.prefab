@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a94f9d5cdc9d145e5b10a7951ed3ab7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  name: Pearce
   npcAnimator: {fileID: 3850487881725283884}
   dialoguePanel: {fileID: 0}
   dialogueText: {fileID: 0}

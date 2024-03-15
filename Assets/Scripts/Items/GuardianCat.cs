@@ -11,11 +11,14 @@ public class GuardianCat : Item
 
     public override void Use(RagdollMain ragdollMain)
     {
-        originalMaxHealth = ragdollMain.healthManager.getMaxHealth();
-        ragdollMain.healthManager.setMaxHealth((int)multiplier);
+        if (!IsActive) {
+            IsActive = true;
+            originalMaxHealth = ragdollMain.healthManager.getMaxHealth();
+            ragdollMain.healthManager.setMaxHealth((int)multiplier);
 
-        // Safe to start the coroutine here and keep a reference to it in the base class
-        StartCoroutine(Reset(ragdollMain));
+            // Safe to start the coroutine here and keep a reference to it in the base class
+            StartCoroutine(Reset(ragdollMain));
+        }
     }
 
     public override IEnumerator Reset(RagdollMain ragdollMain)

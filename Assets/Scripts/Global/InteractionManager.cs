@@ -81,7 +81,7 @@ public class InteractionManager : MonoBehaviour
                 thisEToInteract.SetActive(false);
                 switch (speakers)
                 {
-                    case "Ms. Pretty":
+                    case "Pretty":
                         //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.MSPRETTY));
                         DialogueManager.GetInstance().EnterDialogueMode(speakers);
                         break;

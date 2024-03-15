@@ -9,13 +9,18 @@ public class FishTreat : Item
 
     public override void Use(RagdollMain ragdollMain)
     {
-        // Assuming ragdollMain has a method to heal
-        ragdollMain.healthManager.heal((int)multiplier);
+        if (!IsActive) {
+            IsActive = true;
+            // Assuming ragdollMain has a method to heal
+            ragdollMain.healthManager.heal((int)multiplier);
+            StartCoroutine(Reset(ragdollMain));
+        }
     }
 
     public override IEnumerator Reset(RagdollMain ragdollMain)
     {
         // No reset logic required due to instant effect
+        ItemManager.Instance.Deactivate(this);
         yield break;
     }
 }

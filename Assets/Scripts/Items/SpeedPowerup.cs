@@ -10,13 +10,17 @@ public class SpeedPowerup : Item
 
     public override void Use(RagdollMain ragdollMain)
     {
-        ragdollMain.moveSpeed *= multiplier;
-        StartCoroutine(Reset(ragdollMain));
+        if (!IsActive) {
+            IsActive = true;
+            ragdollMain.moveSpeed *= multiplier;
+            StartCoroutine(Reset(ragdollMain));
+        }
     }
 
     public override IEnumerator Reset(RagdollMain ragdollMain)
     {
         yield return new WaitForSeconds(duration);
         ragdollMain.moveSpeed /= multiplier;
+        ItemManager.Instance.Deactivate(this);
     }
 }

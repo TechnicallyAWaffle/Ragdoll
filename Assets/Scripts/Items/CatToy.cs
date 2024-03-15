@@ -13,16 +13,19 @@ public class CatToy : Item
 
     public override void Use(RagdollMain ragdollMain)
     {
-        // Freeze entities with moveSpeed
-        FreezeEntitiesWithTag("Scuttler");
-        FreezeEntitiesWithTag("Vice");
-        // FreezeEntitiesWithTag("Flamespout");
+        if (!IsActive) {
+            IsActive = true;
+            // Freeze entities with moveSpeed
+            FreezeEntitiesWithTag("Scuttler");
+            FreezeEntitiesWithTag("Vice");
+            // FreezeEntitiesWithTag("Flamespout");
 
-        // Freeze SwingingMaces
-        FreezeSwingingMaces();
+            // Freeze SwingingMaces
+            FreezeSwingingMaces();
 
-        // Start the coroutine to unfreeze the entities after 10 seconds
-        StartCoroutine(Reset(ragdollMain));
+            // Start the coroutine to unfreeze the entities after 10 seconds
+            StartCoroutine(Reset(ragdollMain));
+        }
     }
 
     private void FreezeEntitiesWithTag(string tag)
@@ -98,5 +101,6 @@ public class CatToy : Item
         // Clear dictionaries for the next use
         originalSpeeds.Clear();
         originalMaceStates.Clear();
+        ItemManager.Instance.Deactivate(this);
     }
 }

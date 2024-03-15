@@ -67,7 +67,7 @@ public class DialogueManager : MonoBehaviour
                 currentStory = new Story(embrodyleDialogue.text);
                 currentStory.variablesState["speakers"] = "SOLO";
                 break;
-            case "Ms. Pretty":
+            case "Pretty":
                 currentStory = new Story(msPrettyDialogue.text);
                 currentStory.variablesState["speakers"] = "SOLO";
                 break;
