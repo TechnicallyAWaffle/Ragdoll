@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Pair : MonoBehaviour
 {
-    public List<GameObject> npcs = new List<GameObject>(); // Holds up to two NPCs
+    public List<NPC> npcs = new List<NPC>(); // Holds up to two NPCs
 
     // Method to add an NPC to the pair if it has space
-    public bool TryAddNPC(GameObject npc)
+    public bool TryAddNPC(NPC npc)
     {
         if (npcs.Count < 2)
         {

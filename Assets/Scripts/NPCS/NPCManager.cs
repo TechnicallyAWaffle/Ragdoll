@@ -82,11 +82,11 @@ public class NPCManager : MonoBehaviour
 
     public void NPCUnlocked(NPC npc)
     {
-        Debug.Log("NPC Unlocked: " + npc.name);
-        if (!unlockedNPCs.Contains(npc.name))
+        Debug.Log("NPC Unlocked: " + npc.npcName);
+        if (!unlockedNPCs.Contains(npc.npcName))
         {
-            unlockedNPCs.Add(npc.name);
-            Debug.Log("NPC Unlocked: " + npc.name);
+            unlockedNPCs.Add(npc.npcName);
+            Debug.Log("NPC Unlocked: " + npc.npcName);
         }
     }
 
@@ -118,11 +118,14 @@ public class NPCManager : MonoBehaviour
                         // Adjust Y position for proper floor placement before instantiation
                         Vector3 adjustedSpawnPosition = AdjustHeightForProperFloorPlacement(initialSpawnPosition, prefab);
                         Vector3 positionOffset2 = new Vector3(0, -0.07f, 0);
-                        GameObject npcInstance = Instantiate(prefab, adjustedSpawnPosition + positionOffset2, Quaternion.identity);
+                        GameObject npcGameObject = Instantiate(prefab, adjustedSpawnPosition + positionOffset2, Quaternion.identity);
+
+                        // Use GetComponent to get the NPC component from the instantiated GameObject
+                        NPC npcInstance = npcGameObject.GetComponent<NPC>();
 
                         Debug.Log($"Spawned {npcName} at Position: {npcInstance.transform.position}");
 
-                        placed = pairs[randomIndex].TryAddNPC(npcInstance);
+                        placed = pairs[randomIndex].TryAddNPC(npcGameObject.GetComponent<NPC>());
     
                         Animator npcAnimator = npcInstance.GetComponent<Animator>();
                         if (npcAnimator != null)

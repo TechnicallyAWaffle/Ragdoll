@@ -9,7 +9,12 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private int minVolume;
     private FMOD.Studio.EventInstance instance;
     public FMODUnity.EventReference fmodEvent;
+    private static AudioManager managerInstance;
 
+    public static AudioManager GetInstance()
+    {
+        return managerInstance;
+    }
     public enum HubTracks
     {
         DEFAULT,
@@ -22,6 +27,7 @@ public class AudioManager : MonoBehaviour
     private void Awake()
     {
         instance = FMODUnity.RuntimeManager.CreateInstance(fmodEvent);
+        PlaySceneTrack();
     }
 
     public void PlaySceneTrack()

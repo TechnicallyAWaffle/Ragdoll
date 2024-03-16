@@ -66,48 +66,52 @@ public class InteractionManager : MonoBehaviour
     {
         if (context.performed)
         {
-            string speakers = "";
+            NPC speakers = new NPC();
             if (currentPair != null)
             {
                 // Interact with NPCs in the Pair
-                foreach (GameObject npc in currentPair.npcs)
+                foreach (NPC npc in currentPair.npcs)
                 {
-                    Debug.Log($"Interacting with NPC: {npc.name}");
+                    Debug.Log($"Interacting with NPC: {npc.npcName}");
+                    speakers = npc;
                 }
                 Debug.Log($"Total NPCs in this Pair: {currentPair.npcs.Count}");
 
                 if (DialogueManager.GetInstance().dialogueIsPlaying)
                     DialogueManager.GetInstance().ContinueStory();
                 thisEToInteract.SetActive(false);
-                switch (speakers)
-                {
-                    case "Pretty":
-                        //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.MSPRETTY));
-                        DialogueManager.GetInstance().EnterDialogueMode(speakers);
-                        break;
-                    case "Pearce":
-                        //Call GUI event
-                        //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.PEARCE));
-                        DialogueManager.GetInstance().EnterDialogueMode(speakers);
-                        break;
-                    case "Embrodyle":
-                        //Store dropped items in lost items list in SceneLoader. Move one random one into inventory when this is called.
-                        //Go on date
-                        //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.EMBRODYLE));
-                        DialogueManager.GetInstance().EnterDialogueMode(speakers);
-                        break;
-                    case "Inkwell":
-                        //No inkwell theme yet
-                        //Call GUI event
-                        break;
-                    case "Escort":
-                        //StartCoroutine(ragdollMain.GoToCheckpoint(currentNPC.transform.position, currentNPC.GetComponent<Animator>()));
-                        DialogueManager.GetInstance().EnterDialogueMode(speakers);
-                        break;
-                    case "":
-                        Debug.Log("test1ran");
-                        DialogueManager.GetInstance().EnterDialogueMode(speakers);
-                        break;
+
+                if (speakers) {
+                    switch (speakers.npcName)
+                    {
+                        case "Pretty":
+                            //audioManager.StartCoroutine(audioManager.ChangeHubCharacterTrack(AudioManager.HubTracks.MSPRETTY));
+                            DialogueManager.GetInstance().EnterDialogueMode(speakers);
+                            break;
+                        case "Pearce":
+                            //Call GUI event
+                            AudioManager.GetInstance().StartCoroutine(AudioManager.GetInstance().ChangeHubCharacterTrack(AudioManager.HubTracks.PEARCE));
+                            DialogueManager.GetInstance().EnterDialogueMode(speakers);
+                            break;
+                        case "Embrodyle":
+                            //Store dropped items in lost items list in SceneLoader. Move one random one into inventory when this is called.
+                            //Go on date
+                            AudioManager.GetInstance().StartCoroutine(AudioManager.GetInstance().ChangeHubCharacterTrack(AudioManager.HubTracks.EMBRODYLE));
+                            DialogueManager.GetInstance().EnterDialogueMode(speakers);
+                            break;
+                        case "Inkwell":
+                            //No inkwell theme yet
+                            //Call GUI event
+                            break;
+                        case "Escort":
+                            //StartCoroutine(ragdollMain.GoToCheckpoint(currentNPC.transform.position, currentNPC.GetComponent<Animator>()));
+                            DialogueManager.GetInstance().EnterDialogueMode(speakers);
+                            break;
+                        case "":
+                            Debug.Log("test1ran");
+                            DialogueManager.GetInstance().EnterDialogueMode(speakers);
+                            break;
+                    }
                 }
             }
             else if (currentEscort != null)

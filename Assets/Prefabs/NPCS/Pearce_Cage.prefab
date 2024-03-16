@@ -35,7 +35,7 @@ Transform:
   m_Children:
   - {fileID: 2027683398828341599}
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2627164874054357418
 SpriteRenderer:
@@ -254,6 +254,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8757074340763016406, guid: 57e0e9442f03c4705a0720d89dc4ce48, type: 3}
       propertyPath: name
+      value: Pearce
+      objectReference: {fileID: 0}
+    - target: {fileID: 8757074340763016406, guid: 57e0e9442f03c4705a0720d89dc4ce48, type: 3}
+      propertyPath: npcName
       value: Pearce
       objectReference: {fileID: 0}
     m_RemovedComponents: []

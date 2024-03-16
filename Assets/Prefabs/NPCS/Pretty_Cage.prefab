@@ -35,7 +35,7 @@ Transform:
   m_Children:
   - {fileID: 8066193685849763850}
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8074268133772141485
 SpriteRenderer:
@@ -252,9 +252,17 @@ PrefabInstance:
       propertyPath: name
       value: Pretty
       objectReference: {fileID: 0}
+    - target: {fileID: 2080428130428251794, guid: cdc4e47c382be45d19be1e4133f9e1e7, type: 3}
+      propertyPath: npcName
+      value: Pretty
+      objectReference: {fileID: 0}
     - target: {fileID: 4763916352967070164, guid: cdc4e47c382be45d19be1e4133f9e1e7, type: 3}
       propertyPath: m_Name
       value: Pretty_Caged
+      objectReference: {fileID: 0}
+    - target: {fileID: 7752242985207970882, guid: cdc4e47c382be45d19be1e4133f9e1e7, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -6,8 +6,7 @@ using UnityEngine.UI;
 [System.Serializable]
 public class NPC : MonoBehaviour
 {
-
-    public string name;
+    public string npcName;
     public Animator npcAnimator;   
     public GameObject dialoguePanel;
     public Text dialogueText;
