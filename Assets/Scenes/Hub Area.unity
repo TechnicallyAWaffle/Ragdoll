@@ -1790,7 +1790,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 656810906873400908, guid: ad2ec76c38e7fb646a6f3162b740b157, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.01750012
+      value: -0.017499927
       objectReference: {fileID: 0}
     - target: {fileID: 656810906873400908, guid: ad2ec76c38e7fb646a6f3162b740b157, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1834,7 +1834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1129949780232127437, guid: ad2ec76c38e7fb646a6f3162b740b157, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000047683716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1129949780232127437, guid: ad2ec76c38e7fb646a6f3162b740b157, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1987,6 +1987,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialogueManager
       objectReference: {fileID: 0}
+    - target: {fileID: 9199828828779340852, guid: 71a11743c35274928bb5e40d5da4efb3, type: 3}
+      propertyPath: dialoguePanelPrefab
+      value: 
+      objectReference: {fileID: 4067927503656556862, guid: 5c221a006c477254d900f7d988f2c95c, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

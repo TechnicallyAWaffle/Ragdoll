@@ -9,7 +9,7 @@ using System.Data;
 public class DialogueManager : MonoBehaviour
 {
     [Header("Dialogue UI")]
-    [SerializeField] private GameObject dialoguePanel;
+    [SerializeField] private GameObject dialoguePanelPrefab;
     private GameObject currentDialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
     private Story currentStory;
@@ -51,7 +51,7 @@ public class DialogueManager : MonoBehaviour
     public void EnterDialogueMode(NPC npc)
     {
         Vector3 spawnOffset = new Vector3(1, 1, 0); // Adjust this to set the relative position.
-        GameObject npcGameObject = Instantiate(dialoguePanel, npc.transform.position + spawnOffset, Quaternion.identity, npc.transform);
+        currentDialoguePanel = Instantiate(dialoguePanelPrefab, npc.transform.position + spawnOffset, Quaternion.identity, npc.transform);
 
         switch (npc.npcName)
         {
@@ -78,7 +78,7 @@ public class DialogueManager : MonoBehaviour
                 break;
         }
         dialogueIsPlaying = true;
-        dialoguePanel.SetActive(true);
+        // dialoguePanel.SetActive(true);
 
         currentStory.BindExternalFunction("SetSpeaker", (string character) =>
         {
@@ -98,8 +98,8 @@ public class DialogueManager : MonoBehaviour
     {
         Debug.Log("Exit Dialogue Function Called");
         dialogueIsPlaying = false;
-        dialoguePanel.SetActive(false);
-        dialogueText.text = "";
+        // dialoguePanel.SetActive(false);
+        // dialogueText.text = "";
         currentStory.UnbindExternalFunction("SetSpeaker");
         currentStory = null;
     }
@@ -108,7 +108,7 @@ public class DialogueManager : MonoBehaviour
         if (currentStory.canContinue)
         {
             //Grab the next line of dialogue
-            dialogueText.text = currentStory.Continue();
+            currentDialoguePanel.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = currentStory.Continue();
         }
         else
         {

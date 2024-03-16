@@ -90,13 +90,13 @@ public class InteractionManager : MonoBehaviour
                             break;
                         case "Pearce":
                             //Call GUI event
-                            AudioManager.GetInstance().StartCoroutine(AudioManager.GetInstance().ChangeHubCharacterTrack(AudioManager.HubTracks.PEARCE));
+                            // AudioManager.GetInstance().StartCoroutine(AudioManager.GetInstance().ChangeHubCharacterTrack(AudioManager.HubTracks.PEARCE));
                             DialogueManager.GetInstance().EnterDialogueMode(speakers);
                             break;
                         case "Embrodyle":
                             //Store dropped items in lost items list in SceneLoader. Move one random one into inventory when this is called.
                             //Go on date
-                            AudioManager.GetInstance().StartCoroutine(AudioManager.GetInstance().ChangeHubCharacterTrack(AudioManager.HubTracks.EMBRODYLE));
+                            // AudioManager.GetInstance().StartCoroutine(AudioManager.GetInstance().ChangeHubCharacterTrack(AudioManager.HubTracks.EMBRODYLE));
                             DialogueManager.GetInstance().EnterDialogueMode(speakers);
                             break;
                         case "Inkwell":
